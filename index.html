@@ -1,0 +1,1212 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>病房藥師追蹤平台</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --grad-start:#1B2A4A;
+  --grad-mid:#0E4F72;
+  --grad-end:#0E7490;
+  --grad-accent:#06B6D4;
+  --bg:#F0F4F8;
+  --bg-card:#ffffff;
+  --bg2:#EBF4F8;
+  --bg3:#E2EDF5;
+  --tx:#0F1E2E;
+  --tx2:#4A6072;
+  --tx-inv:#F0F8FF;
+  --bd:rgba(14,116,144,0.15);
+  --bd2:rgba(14,116,144,0.30);
+  --r:10px;--rl:16px;
+  --shadow:0 2px 12px rgba(14,116,144,0.10);
+  --shadow-md:0 4px 24px rgba(14,116,144,0.15);
+  --font:'Segoe UI',system-ui,-apple-system,sans-serif
+}
+@media(prefers-color-scheme:dark){
+  :root{
+    --bg:#0B1623;--bg-card:#111E2E;--bg2:#152030;--bg3:#1C2B3D;
+    --tx:#D8EAF5;--tx2:#7BA5C0;
+    --bd:rgba(6,182,212,0.15);--bd2:rgba(6,182,212,0.28);
+    --shadow:0 2px 12px rgba(0,0,0,0.4);--shadow-md:0 4px 24px rgba(0,0,0,0.5)
+  }
+}
+body{font-family:var(--font);background:var(--bg);color:var(--tx);font-size:14px;line-height:1.6;min-height:100vh}
+
+/* ── Page ── */
+.page{max-width:1280px;margin:0 auto;padding:0 0 3rem}
+
+/* ── Header gradient bar ── */
+.header-bar{
+  background:linear-gradient(120deg,var(--grad-start) 0%,var(--grad-mid) 50%,var(--grad-end) 100%);
+  padding:1.4rem 2rem 1.2rem;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
+  box-shadow:0 4px 20px rgba(14,116,144,0.25);
+  margin-bottom:0;
+}
+.header-bar h1{
+  font-size:19px;font-weight:600;color:#fff;letter-spacing:0.3px;
+  display:flex;align-items:center;gap:10px;
+}
+.header-bar h1::before{content:'🏥';font-size:18px}
+.hbadges{display:flex;gap:6px;flex-wrap:wrap}
+.badge{font-size:11px;padding:3px 11px;border-radius:99px;font-weight:600;border:1px solid rgba(255,255,255,0.3);color:#fff;backdrop-filter:blur(4px)}
+.bc{background:rgba(239,68,68,0.35)}.bh{background:rgba(245,158,11,0.35)}.bo{background:rgba(34,197,94,0.30)}
+
+/* ── Content wrapper ── */
+.content{padding:1.6rem 2rem}
+
+/* ── Summary cards ── */
+.sum-cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-bottom:1.6rem}
+.sc{
+  background:var(--bg-card);border-radius:var(--rl);padding:14px 16px;
+  border:1px solid var(--bd);box-shadow:var(--shadow);
+  position:relative;overflow:hidden;
+}
+.sc::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:linear-gradient(90deg,var(--grad-end),var(--grad-accent));
+}
+.sc .n{font-size:24px;font-weight:700;margin-top:4px}
+.sc .l{font-size:11px;color:var(--tx2);margin-top:2px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
+
+/* ── Tabs ── */
+.tabs{display:flex;gap:0;border-bottom:2px solid var(--bd);margin-bottom:1.4rem;flex-wrap:wrap}
+.tab{
+  font-size:13px;padding:8px 18px;border:none;background:none;color:var(--tx2);
+  cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;
+  border-radius:var(--r) var(--r) 0 0;height:auto;font-weight:500;transition:all 0.15s;
+}
+.tab:hover:not(.active){color:var(--grad-end);background:var(--bg2)}
+.tab.active{
+  color:var(--grad-end);border-bottom-color:var(--grad-end);
+  font-weight:600;background:var(--bg-card);
+  box-shadow:0 -2px 8px rgba(14,116,144,0.08);
+}
+
+/* ── Search / Action row ── */
+.srow{display:flex;gap:8px;margin-bottom:1.1rem;align-items:center;flex-wrap:wrap}
+.srow input{flex:1;min-width:180px;font-size:13px;border:1px solid var(--bd2);border-radius:var(--r);height:36px;background:var(--bg-card);box-shadow:0 1px 4px rgba(14,116,144,0.07)}
+.srow select{width:145px;font-size:13px;border:1px solid var(--bd2);border-radius:var(--r);height:36px;background:var(--bg-card)}
+.add-btn{
+  height:36px;padding:0 18px;font-size:13px;font-weight:600;
+  background:linear-gradient(90deg,var(--grad-mid),var(--grad-end)) !important;
+  color:#fff !important;border:none;border-radius:var(--r);cursor:pointer;white-space:nowrap;
+  box-shadow:0 2px 8px rgba(14,116,144,0.30);transition:opacity 0.15s;
+}
+.add-btn:hover{opacity:.88}
+
+/* ── Base input / select / button ── */
+input,select,textarea,button{
+  font-family:var(--font);font-size:13px;color:var(--tx);
+  background:var(--bg-card);border:1px solid var(--bd2);
+  border-radius:var(--r);padding:0 10px;height:34px;outline:none;
+}
+input:focus,select:focus,textarea:focus{border-color:var(--grad-end);box-shadow:0 0 0 2px rgba(14,116,144,0.12)}
+textarea{height:auto;padding:7px 10px}
+button{cursor:pointer;background:none}
+button:hover{background:var(--bg2)}
+
+/* ── Table ── */
+.ptbl{width:100%;border-collapse:separate;border-spacing:0;font-size:12.5px;background:var(--bg-card);border-radius:var(--rl);overflow:hidden;border:1px solid var(--bd);box-shadow:var(--shadow)}
+.ptbl th{text-align:left;padding:9px 11px;color:var(--tx2);font-weight:600;border-bottom:1px solid var(--bd);background:linear-gradient(180deg,var(--bg2),var(--bg3));white-space:nowrap;font-size:11.5px;text-transform:uppercase;letter-spacing:0.4px}
+.ptbl td{padding:9px 11px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.ptbl tr:last-child td{border-bottom:none}
+.ptbl tbody tr{transition:background 0.1s}
+.ptbl tbody tr:hover td{background:linear-gradient(90deg,rgba(14,116,144,0.04),rgba(6,182,212,0.04))}
+
+/* ── Priority tags ── */
+.ptag{font-size:11px;padding:2px 9px;border-radius:99px;font-weight:600;white-space:nowrap;display:inline-block;letter-spacing:0.2px}
+.pc{background:#FEE2E2;color:#B91C1C;border:1px solid rgba(185,28,28,0.2)}
+.ph{background:#FEF3C7;color:#92400E;border:1px solid rgba(146,64,14,0.2)}
+.pm{background:#DBEAFE;color:#1E40AF;border:1px solid rgba(30,64,175,0.2)}
+.pl{background:#DCFCE7;color:#166534;border:1px solid rgba(22,101,52,0.2)}
+.pr{background:#F1F5F9;color:#475569;border:1px solid rgba(71,85,105,0.2)}
+
+/* ── Dots ── */
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle;box-shadow:0 0 0 2px rgba(255,255,255,0.8)}
+.dr{background:#EF4444}.da{background:#F59E0B}.dg{background:#10B981}
+
+/* ── Action buttons ── */
+.acbtn{font-size:11px;padding:3px 10px;border-radius:var(--r);border:1px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);height:auto;margin-right:3px;transition:all 0.1s}
+.acbtn:hover{background:var(--bg2);border-color:var(--grad-end);color:var(--grad-end)}
+.delbtn{font-size:11px;padding:3px 10px;border-radius:var(--r);border:1px solid rgba(239,68,68,0.3);background:none;cursor:pointer;color:#DC2626;height:auto;transition:all 0.1s}
+.delbtn:hover{background:#FEF2F2;border-color:#DC2626}
+
+/* ── Back button ── */
+.back-btn{font-size:13px;color:var(--grad-end);background:none;border:none;cursor:pointer;margin-bottom:1.1rem;display:inline-flex;align-items:center;gap:5px;padding:0;height:auto;font-weight:500}
+.back-btn:hover{color:var(--grad-mid);background:none}
+
+/* ── Detail cards ── */
+.dcard{background:var(--bg-card);border:1px solid var(--bd);border-radius:var(--rl);padding:1.2rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+.dcard h3{font-size:13.5px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--grad-mid)}
+.dgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
+.di .lb{font-size:11px;color:var(--tx2);margin-bottom:2px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px}
+.di .vl{font-size:13px;font-weight:500}
+.tcol{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:1rem}
+
+/* ── eGFR bar ── */
+.egfr-bg{height:8px;border-radius:4px;background:var(--bg3);overflow:hidden;margin:5px 0;box-shadow:inset 0 1px 2px rgba(0,0,0,0.08)}
+.egfr-fill{height:100%;border-radius:4px;transition:width 0.4s}
+.egfr-stages{display:flex;justify-content:space-between;font-size:9.5px;color:var(--tx2);margin-top:3px;letter-spacing:0.3px}
+
+/* ── Med table ── */
+.med-tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+.med-tbl th{text-align:left;padding:6px 8px;font-size:11px;color:var(--tx2);font-weight:600;border-bottom:1px solid var(--bd);background:var(--bg2);text-transform:uppercase;letter-spacing:0.4px}
+.med-tbl td{padding:5px 4px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.med-tbl tr:last-child td{border-bottom:none}
+.med-tbl input,.med-tbl select{height:28px;font-size:12px;width:100%;border-radius:6px}
+.del-med-btn{height:24px;width:24px;padding:0;font-size:12px;border-radius:5px;border:1px solid rgba(239,68,68,0.3);color:#DC2626;background:none;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;transition:all 0.1s}
+.del-med-btn:hover{background:#FEF2F2;border-color:#DC2626}
+.add-med-btn{font-size:12px;padding:4px 13px;border-radius:var(--r);border:1px solid var(--bd2);background:none;cursor:pointer;color:var(--grad-end);height:auto;margin-top:9px;font-weight:500;transition:all 0.1s}
+.add-med-btn:hover{background:var(--bg2);border-color:var(--grad-end)}
+
+/* ── Lab rows ── */
+.lrow{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--bd);font-size:12.5px}
+.lrow:last-child{border-bottom:none}
+.lv{font-weight:600;min-width:80px}.lr{font-size:11px;color:var(--tx2)}
+.ls{font-size:11px;padding:2px 8px;border-radius:99px;font-weight:500}
+.sh{background:#FEE2E2;color:#B91C1C}.sn{background:#DCFCE7;color:#166534}
+
+/* ── Alert items ── */
+.ai{display:flex;align-items:flex-start;gap:10px;padding:11px 14px;border-radius:var(--r);margin-bottom:8px;font-size:12.5px;cursor:pointer;border:1px solid transparent;transition:all 0.1s}
+.ai:hover{filter:brightness(0.96);transform:translateX(2px)}
+.ad{background:linear-gradient(135deg,#FEF2F2,#FEE2E2);color:#7F1D1D;border-color:rgba(185,28,28,0.2)}
+.aw{background:linear-gradient(135deg,#FFFBEB,#FEF3C7);color:#78350F;border-color:rgba(146,64,14,0.2)}
+.ainfo{background:linear-gradient(135deg,#EFF6FF,#DBEAFE);color:#1E3A8A;border-color:rgba(30,58,138,0.2)}
+
+/* ── History table ── */
+.hist-tbl{width:100%;border-collapse:collapse;font-size:12px;margin-top:6px}
+.hist-tbl th{text-align:left;padding:5px 8px;font-size:10.5px;color:var(--tx2);font-weight:600;border-bottom:1px solid var(--bd);background:var(--bg2);text-transform:uppercase;letter-spacing:0.4px}
+.hist-tbl td{padding:5px 8px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.hist-tbl tr:last-child td{border-bottom:none}
+.hist-tbl input{height:26px;font-size:12px;width:100%}
+.add-hist-btn{font-size:12px;padding:3px 11px;border-radius:var(--r);border:1px solid var(--bd2);background:none;cursor:pointer;color:var(--grad-end);height:auto;margin-top:6px;font-weight:500}
+.add-hist-btn:hover{background:var(--bg2)}
+
+/* ── KDIGO legend ── */
+.kdigo-legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1rem;align-items:center;font-size:12px;color:var(--tx2);background:var(--bg-card);padding:10px 14px;border-radius:var(--r);border:1px solid var(--bd)}
+.kl-item{display:flex;align-items:center;gap:4px;font-size:11.5px}
+.kl-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
+
+/* ── Extra section (lab/culture) ── */
+.extra-section label{font-size:11px;color:var(--tx2);display:block;margin-bottom:3px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px}
+.extra-section textarea{width:100%;min-height:60px;font-size:12.5px;resize:vertical;border:1px solid var(--bd2);background:var(--bg2)}
+
+/* ── Confirm dialog ── */
+.confirm-backdrop{position:fixed;inset:0;background:rgba(15,30,46,0.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:100;padding:1rem}
+.confirm-box{background:var(--bg-card);border:1px solid var(--bd);border-radius:var(--rl);padding:1.5rem;width:100%;max-width:320px;box-shadow:var(--shadow-md)}
+.confirm-box h4{font-size:15px;font-weight:600;margin-bottom:6px;color:var(--tx)}
+.confirm-box p{font-size:13px;color:var(--tx2);margin-bottom:1.1rem;line-height:1.6}
+.confirm-btns{display:flex;gap:8px;justify-content:flex-end}
+.cbtn-cancel{padding:6px 14px;font-size:13px;border:1px solid var(--bd2);background:none;border-radius:var(--r);cursor:pointer;height:auto;color:var(--tx);font-weight:500}
+.cbtn-cancel:hover{background:var(--bg2)}
+.cbtn-del{padding:6px 14px;font-size:13px;border:none;background:linear-gradient(90deg,#DC2626,#EF4444);color:#fff;border-radius:var(--r);cursor:pointer;height:auto;font-weight:600;box-shadow:0 2px 8px rgba(220,38,38,0.3)}
+.cbtn-del:hover{opacity:.9}
+
+/* ── Modal ── */
+.modal-bd{position:fixed;inset:0;background:rgba(15,30,46,0.5);backdrop-filter:blur(4px);display:flex;align-items:flex-start;justify-content:center;padding:1.5rem 1rem;z-index:50;overflow-y:auto}
+.modal{background:var(--bg-card);border-radius:var(--rl);border:1px solid var(--bd);padding:1.5rem;width:100%;max-width:640px;box-shadow:var(--shadow-md)}
+.modal h2{font-size:16px;font-weight:600;margin-bottom:1.1rem;color:var(--grad-mid);display:flex;align-items:center;gap:7px}
+.modal h2::before{content:'＋';width:24px;height:24px;background:linear-gradient(135deg,var(--grad-mid),var(--grad-end));color:#fff;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
+.fg{display:flex;flex-direction:column;gap:4px}
+.fg.full{grid-column:1/-1}
+.fg label{font-size:11px;color:var(--tx2);font-weight:600;text-transform:uppercase;letter-spacing:0.4px}
+.fg input,.fg select{width:100%;border:1px solid var(--bd2)}
+.fg textarea{width:100%;min-height:65px;resize:vertical;border:1px solid var(--bd2)}
+.mbtns{display:flex;gap:8px;justify-content:flex-end}
+.mbtns button{height:34px;padding:0 16px;font-size:13px;border-radius:var(--r);cursor:pointer;font-weight:500}
+.mbcancel{border:1px solid var(--bd2);background:none;color:var(--tx)}
+.mbsave{background:linear-gradient(90deg,var(--grad-mid),var(--grad-end)) !important;color:#fff !important;border:none;box-shadow:0 2px 8px rgba(14,116,144,0.3)}
+.modal-med-tbl{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:6px}
+.modal-med-tbl th{text-align:left;padding:5px 7px;font-size:10.5px;color:var(--tx2);font-weight:600;border-bottom:1px solid var(--bd);text-transform:uppercase;letter-spacing:0.4px}
+.modal-med-tbl td{padding:4px 3px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.modal-med-tbl tr:last-child td{border-bottom:none}
+.modal-med-tbl input,.modal-med-tbl select{height:28px;font-size:12px;width:100%}
+
+/* ── Section divider label ── */
+.section-label{font-size:11px;color:var(--tx2);font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin:4px 0 7px;padding-bottom:5px;border-bottom:1px solid var(--bd);display:flex;align-items:center;gap:6px}
+.section-label::before{content:'';width:3px;height:12px;border-radius:2px;background:linear-gradient(180deg,var(--grad-mid),var(--grad-end));display:inline-block}
+
+@media(max-width:640px){
+  .sum-cards{grid-template-columns:1fr 1fr}
+  .tcol{grid-template-columns:1fr}
+  .dgrid{grid-template-columns:1fr}
+  .fgrid{grid-template-columns:1fr}
+  .fg.full{grid-column:auto}
+  .content{padding:1rem}
+  .header-bar{padding:1rem 1.2rem}
+}
+
+/* ══ Login Screen ══ */
+.login-screen{
+  position:fixed;inset:0;
+  background:linear-gradient(160deg,#D6E8F0 0%,#C2D9E8 40%,#B8D0E4 70%,#C9DDE8 100%);
+  display:flex;align-items:center;justify-content:center;z-index:999;padding:1rem;
+}
+.login-box{
+  background:#EEF5FA;
+  border:1px solid #B8D4E5;
+  border-radius:20px;padding:2.5rem 2rem;
+  width:100%;max-width:360px;
+  box-shadow:0 8px 32px rgba(100,160,200,0.18);
+  text-align:center;
+}
+.login-logo{font-size:36px;margin-bottom:0.5rem}
+.login-title{font-size:20px;font-weight:700;color:#2A5A7A;margin-bottom:4px;letter-spacing:0.3px}
+.login-sub{font-size:12px;color:#7AAABF;margin-bottom:2rem}
+.login-form{display:flex;flex-direction:column;gap:12px;text-align:left}
+.login-form label{font-size:11px;color:#5A8FA8;font-weight:600;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:2px;display:block}
+.login-form input{
+  height:40px;border-radius:10px;border:1px solid #A8CCDD;
+  background:#F5FAFD;color:#2A5A7A;padding:0 14px;font-size:13px;width:100%;
+}
+.login-form input::placeholder{color:#9BBFCF}
+.login-form input:focus{outline:none;border-color:#6AAABF;box-shadow:0 0 0 3px rgba(100,170,200,0.15);background:#fff}
+.login-btn{
+  height:42px;border-radius:10px;border:none;
+  background:linear-gradient(90deg,#5BA3BF,#3D8FA8);
+  color:#fff;font-size:14px;font-weight:700;cursor:pointer;margin-top:6px;
+  box-shadow:0 4px 14px rgba(80,150,190,0.30);transition:opacity 0.15s;letter-spacing:0.3px;
+}
+.login-btn:hover{opacity:.88}
+.login-err{font-size:12px;color:#C0504A;text-align:center;min-height:18px;margin-top:-4px}
+.login-hint{font-size:11px;color:#9BBFCF;text-align:center;margin-top:1rem}
+
+/* ══ User bar (top right in header) ══ */
+.user-bar{display:flex;align-items:center;gap:10px}
+.user-chip{
+  display:flex;align-items:center;gap:7px;
+  background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);
+  border-radius:99px;padding:4px 12px 4px 8px;color:#fff;font-size:12px;font-weight:500;
+}
+.user-avatar{
+  width:22px;height:22px;border-radius:50%;
+  background:linear-gradient(135deg,#06B6D4,#0E7490);
+  display:inline-flex;align-items:center;justify-content:center;
+  font-size:11px;font-weight:700;color:#fff;flex-shrink:0;
+}
+.logout-btn{
+  height:28px;padding:0 11px;font-size:11px;font-weight:600;border-radius:99px;
+  border:1px solid rgba(255,255,255,0.3);background:none;color:rgba(255,255,255,0.8);cursor:pointer;
+}
+.logout-btn:hover{background:rgba(255,255,255,0.15);color:#fff}
+
+/* ══ Admin panel ══ */
+.admin-panel{background:var(--bg-card);border:1px solid var(--bd);border-radius:var(--rl);padding:1.4rem;margin-bottom:1.2rem;box-shadow:var(--shadow)}
+.admin-panel h3{font-size:14px;font-weight:600;color:var(--grad-mid);margin-bottom:1rem;display:flex;align-items:center;gap:7px}
+.user-table{width:100%;border-collapse:collapse;font-size:13px}
+.user-table th{text-align:left;padding:7px 10px;font-size:11px;color:var(--tx2);font-weight:600;border-bottom:1px solid var(--bd);background:var(--bg2);text-transform:uppercase;letter-spacing:0.4px}
+.user-table td{padding:8px 10px;border-bottom:1px solid var(--bd);vertical-align:middle}
+.user-table tr:last-child td{border-bottom:none}
+.role-badge{font-size:10px;padding:2px 8px;border-radius:99px;font-weight:600}
+.role-admin{background:#FEF3C7;color:#92400E;border:1px solid rgba(146,64,14,0.2)}
+.role-user{background:#DBEAFE;color:#1E40AF;border:1px solid rgba(30,64,175,0.2)}
+</style>
+</head>
+<body>
+
+<div id="login-screen" class="login-screen">
+  <div class="login-box">
+    <div class="login-logo">🏥</div>
+    <div class="login-title">病房藥師追蹤平台</div>
+    <div class="login-sub">請輸入帳號與密碼登入</div>
+    <div class="login-form">
+      <div>
+        <label>帳號</label>
+        <input id="login-user" type="text" placeholder="輸入帳號" autocomplete="username"/>
+      </div>
+      <div>
+        <label>密碼</label>
+        <input id="login-pass" type="password" placeholder="輸入密碼" autocomplete="current-password"/>
+      </div>
+      <div id="login-err" class="login-err"></div>
+      <button class="login-btn" onclick="tryLogin()">登　入</button>
+    </div>
+    <div class="login-hint">忘記密碼請聯繫管理員</div>
+  </div>
+</div>
+<div class="page">
+  <div class="header-bar"><h1>病房藥師追蹤平台</h1><div style="display:flex;align-items:center;gap:14px"><div class="hbadges" id="hbadges"></div><div class="user-bar" id="user-bar"></div></div></div>
+  <div class="content">
+  <div class="sum-cards" id="sumcards"></div>
+  <div class="tabs">
+    <button class="tab active" onclick="switchTab('patients')">病患總覽</button>
+    <button class="tab" onclick="switchTab('alerts')">待處理警示</button>
+    <button class="tab" onclick="switchTab('renal')">腎功能</button>
+    <button class="tab" onclick="switchTab('labs')">抽血時間</button>
+    <button class="tab" onclick="switchTab('abxwatch')">抗生素監測</button>
+  </div>
+  <div id="viewroot"></div>
+  <div id="modalroot"></div>
+  <div id="confirmroot"></div>
+</div><!-- /content -->
+</div><!-- /page -->
+<script>
+/* ══════════════════════════════════════════
+   AUTH & STORAGE SYSTEM
+   - Users defined in USERS array
+   - Each user's data stored separately in localStorage
+   - Admin can see all users' data
+══════════════════════════════════════════ */
+
+/* ── User accounts ─────────────────────────
+   To add/remove users: edit this array.
+   role: 'admin' can manage accounts & see all data
+   role: 'user' sees only their own data
+   ─────────────────────────────────────────── */
+const USERS = [
+  {username:'admin',   password:'admin1234',  displayName:'管理員',    role:'admin'},
+  {username:'summer',  password:'summer2025', displayName:'Summer',    role:'user'},
+  {username:'pharm01', password:'ward0101',   displayName:'藥師 01',   role:'user'},
+  {username:'pharm02', password:'ward0202',   displayName:'藥師 02',   role:'user'},
+];
+
+let currentUser = null;
+
+/* ── Storage helpers ── */
+function storageKey(){ return 'wpt_data_' + currentUser.username; }
+function saveData(){
+  try{ localStorage.setItem(storageKey(), JSON.stringify(pts)); }
+  catch(e){ console.warn('localStorage save failed', e); }
+}
+function loadData(){
+  try{
+    const raw = localStorage.getItem(storageKey());
+    if(raw){
+      const saved = JSON.parse(raw);
+      pts.length = 0;
+      saved.forEach(p => pts.push(p));
+    }
+  } catch(e){ console.warn('localStorage load failed', e); }
+}
+function clearData(){
+  try{ localStorage.removeItem(storageKey()); } catch(e){}
+}
+
+/* ── Login / Logout ── */
+function tryLogin(){
+  const u = document.getElementById('login-user').value.trim().toLowerCase();
+  const p = document.getElementById('login-pass').value;
+  const found = USERS.find(x => x.username === u && x.password === p);
+  if(!found){
+    document.getElementById('login-err').textContent = '帳號或密碼錯誤，請重試';
+    document.getElementById('login-pass').value = '';
+    return;
+  }
+  currentUser = found;
+  loadData();
+  document.getElementById('login-screen').style.display = 'none';
+  updateUserBar();
+  render();
+}
+
+function logout(){
+  saveData();
+  currentUser = null;
+  pts.length = 0;
+  // Reset to sample data
+  resetSampleData();
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-err').textContent = '';
+}
+
+function updateUserBar(){
+  const bar = document.getElementById('user-bar');
+  if(!bar || !currentUser) return;
+  bar.innerHTML = `
+    <div class="user-chip">
+      <div class="user-avatar">${currentUser.displayName.charAt(0)}</div>
+      ${currentUser.displayName}
+      ${currentUser.role==='admin'?'<span class="role-badge role-admin" style="margin-left:3px">管理員</span>':''}
+    </div>
+    <button class="logout-btn" onclick="logout()">登出</button>`;
+}
+
+/* Allow Enter key to submit login */
+document.addEventListener('keydown', function(e){
+  if(e.key==='Enter' && document.getElementById('login-screen').style.display !== 'none'){
+    tryLogin();
+  }
+});
+
+const FREQ_OPTIONS=['QD','BID','TID','QID','Q6H','Q8H','Q12H','Q24H','Q48H','QN','PRN','ST','TID AC','QD AC','TID PC'];
+const ROUTE_OPTIONS=['PO','IV','IV drip','SC','IM','SL','TOP','INH'];
+const PRIORITY_ORDER={Critical:0,High:1,Medium:2,Low:3,Routine:4};
+
+/* ══ ABX Detection ══ */
+const ABX_KEYWORDS = new Set(["acemycin", "acylo", "ambisome", "amoxicillin", "ampolin", "avelox", "baktar", "baraclude", "bicillin", "biktarvy", "brosym", "cefa", "cefiderocol", "ceflour", "cephalexin", "cetazone", "cexime", "cexitin", "cinolone", "ciproxin", "claforan", "clincin", "colimycin", "cravit", "cresemba", "cubicin", "curam", "cymevene", "dificid", "diflucan", "disfect", "dovato", "doxymycin", "epclusa", "eraflu-cdc", "eraxis", "erythrocin", "ethambutol", "finibax", "flumarin", "flusine", "fungizone", "fuyou", "genvoya", "imipenem", "invanz", "isentress", "isoniazid", "juluca", "klaricid", "lagevrio", "lindacin", "maviret", "mepem", "metrozole", "minoline", "mycamine", "neomycin", "ocillina", "odefsey", "paxlovid-cdc", "penicillin", "polymyxin", "posanol", "prezcobix", "prothionamide", "pyrazinamide", "rapiacta", "ribarin", "rifabutin", "rifampin", "sabs", "sevatrim", "sintrix", "soonmelt", "supecef", "symtuza", "synagis", "taigexyn", "tamiflu", "targocid", "tatumcef", "tazocin", "terfung", "tetracycline", "tienam", "tivicay", "triumeq", "truvada", "tygacil", "ufo", "ulexin", "unasyn", "v-genta", "valcyte", "valtrex", "vancomycin", "vancover", "veklury", "vemlidy", "vfend", "viread", "vosevi", "xofluza", "zavicefta", "zerbaxa", "ziefmycin", "zinforo", "zithromax", "zovirax", "zyvox"]);
+const ABX_BRAND_TO_GENERIC = {"acemycin": ["amikacin"], "v-genta": ["gentamicin"], "vgenta": ["gentamicin"], "neomycin": ["neomycin"], "ambisome": ["amphotericin b liposomal"], "cresemba": ["isavuconazole"], "eraxis": ["anidulafungin"], "mycamine": ["micafungin"], "posanol": ["posaconazole"], "fungizone": ["amphotericin b"], "fuyou": ["griseofulvin"], "diflucan": ["fluconazole"], "terfung": ["terbinafine"], "flusine": ["flucytosine"], "vfend": ["voriconazole"], "cymevene": ["ganciclovir"], "acylo": ["acyclovir"], "zovirax": ["acyclovir"], "valtrex": ["valacyclovir"], "valcyte": ["valganciclovir"], "tamiflu": ["oseltamivir"], "eraflu": ["oseltamivir"], "rapiacta": ["peramivir"], "xofluza": ["baloxavir"], "veklury": ["remdesivir"], "lagevrio": ["molnupiravir"], "paxlovid": ["nirmatrelvir", "ritonavir"], "baraclude": ["entecavir"], "viread": ["tenofovir disoproxil"], "vemlidy": ["tenofovir alafenamide"], "maviret": ["glecaprevir", "pibrentasvir"], "epclusa": ["sofosbuvir", "velpatasvir"], "vosevi": ["sofosbuvir", "velpatasvir", "voxilaprevir"], "ribarin": ["ribavirin"], "triumeq": ["abacavir", "dolutegravir", "lamivudine"], "prezcobix": ["darunavir", "cobicistat"], "symtuza": ["darunavir", "cobicistat", "emtricitabine", "tenofovir alafenamide"], "dovato": ["dolutegravir", "lamivudine"], "tivicay": ["dolutegravir"], "juluca": ["dolutegravir", "rilpivirine"], "genvoya": ["elvitegravir", "cobicistat", "emtricitabine", "tenofovir alafenamide"], "truvada": ["emtricitabine", "tenofovir disoproxil"], "odefsey": ["emtricitabine", "rilpivirine", "tenofovir alafenamide"], "biktarvy": ["bictegravir", "emtricitabine", "tenofovir alafenamide"], "isentress": ["raltegravir"], "mepem": ["meropenem"], "meropenem": ["meropenem"], "tienam": ["imipenem", "cilastatin"], "imipenem": ["imipenem", "cilastatin"], "finibax": ["doripenem"], "invanz": ["ertapenem"], "brosym": ["cefoperazone", "sulbactam"], "cexime": ["cefixime"], "claforan": ["cefotaxime"], "sintrix": ["ceftriaxone"], "supecef": ["cefpirome"], "tatumcef": ["ceftazidime"], "zavicefta": ["ceftazidime", "avibactam"], "zinforo": ["ceftaroline"], "zerbaxa": ["ceftolozane", "tazobactam"], "cefa": ["cefazolin"], "cephalexin": ["cephalexin"], "ulexin": ["cephalexin"], "cetazone": ["cefmetazole"], "cexitin": ["cefoxitin"], "ceflour": ["cefuroxime"], "cefiderocol": ["cefiderocol"], "avelox": ["moxifloxacin"], "moxifloxacin": ["moxifloxacin"], "cinolone": ["ciprofloxacin"], "ciproxin": ["ciprofloxacin"], "ciprofloxacin": ["ciprofloxacin"], "cravit": ["levofloxacin"], "levofloxacin": ["levofloxacin"], "taigexyn": ["finafloxacin"], "disfect": ["norfloxacin"], "targocid": ["teicoplanin"], "teicoplanin": ["teicoplanin"], "vancover": ["vancomycin"], "vancomycin": ["vancomycin"], "cubicin": ["daptomycin"], "daptomycin": ["daptomycin"], "lindacin": ["clindamycin"], "clincin": ["clindamycin"], "clindamycin": ["clindamycin"], "erythrocin": ["erythromycin"], "erythromycin": ["erythromycin"], "klaricid": ["clarithromycin"], "clarithromycin": ["clarithromycin"], "zithromax": ["azithromycin"], "azithromycin": ["azithromycin"], "metrozole": ["metronidazole"], "metronidazole": ["metronidazole"], "zyvox": ["linezolid"], "linezolid": ["linezolid"], "penicillin": ["penicillin g"], "bicillin": ["benzathine penicillin"], "ampolin": ["ampicillin"], "ampicillin": ["ampicillin"], "amoxicillin": ["amoxicillin"], "ocillina": ["cloxacillin"], "cloxacillin": ["cloxacillin"], "ziefmycin": ["dicloxacillin"], "curam": ["amoxicillin", "clavulanate"], "soonmelt": ["amoxicillin"], "unasyn": ["ampicillin", "sulbactam"], "tazocin": ["piperacillin", "tazobactam"], "piperacillin": ["piperacillin", "tazobactam"], "colimycin": ["colistin"], "colistin": ["colistin"], "polymyxin": ["polymyxin b"], "baktar": ["trimethoprim", "sulfamethoxazole"], "sevatrim": ["trimethoprim", "sulfamethoxazole"], "trimethoprim": ["trimethoprim", "sulfamethoxazole"], "doxymycin": ["doxycycline"], "doxycycline": ["doxycycline"], "minoline": ["minocycline"], "minocycline": ["minocycline"], "tetracycline": ["tetracycline"], "tygacil": ["tigecycline"], "tigecycline": ["tigecycline"], "dificid": ["fidaxomicin"], "flumarin": ["flomoxef"], "sabs": ["sulbactam"], "ufo": ["fosfomycin"], "fosfomycin": ["fosfomycin"], "synagis": ["palivizumab"], "relebactam": ["imipenem", "cilastatin", "relebactam"], "rifampin": ["rifampicin"], "rifampicin": ["rifampicin"], "rifabutin": ["rifabutin"], "isoniazid": ["isoniazid"], "ethambutol": ["ethambutol"], "pyrazinamide": ["pyrazinamide"], "tubax": ["prothionamide"], "prothionamide": ["prothionamide"]};
+
+function isAntibiotic(n){
+  if(!n)return false;
+  n=n.trim().toLowerCase();
+  for(const k of ABX_KEYWORDS){if(n.includes(k))return true;}
+  for(const b of Object.keys(ABX_BRAND_TO_GENERIC)){if(n.includes(b))return true;}
+  return false;
+}
+function getGenericNames(n){
+  if(!n)return[];
+  n=n.trim().toLowerCase();
+  for(const[b,g]of Object.entries(ABX_BRAND_TO_GENERIC)){if(n.includes(b))return g;}
+  for(const k of ABX_KEYWORDS){if(n.includes(k))return[k];}
+  return[];
+}
+/* ══ KDIGO 2024 ══ */
+function kdigoStage(e){
+  if(e>=90)return{g:'G1',label:'正常或偏高',color:'#1D9E75'};
+  if(e>=60)return{g:'G2',label:'輕度下降',color:'#639922'};
+  if(e>=45)return{g:'G3a',label:'輕中度下降',color:'#EF9F27'};
+  if(e>=30)return{g:'G3b',label:'中重度下降',color:'#BA7517'};
+  if(e>=15)return{g:'G4',label:'重度下降',color:'#E24B4A'};
+  return{g:'G5',label:'腎衰竭(ESRD)',color:'#A32D2D'};
+}
+function calcCCr(age,weight,sCr,sex){
+  const a=parseFloat(age),w=parseFloat(weight),cr=parseFloat(sCr);
+  if(!a||!w||!cr||cr<=0)return null;
+  let c=((140-a)*w)/(72*cr);
+  if((sex||'M').toUpperCase()==='F')c*=0.85;
+  return Math.round(c*10)/10;
+}
+function pClass(p){return{Critical:'pc',High:'ph',Medium:'pm',Low:'pl',Routine:'pr'}[p]||'pr';}
+function bedSort(a,b){return(a.bed||'').localeCompare(b.bed||'','zh-TW',{numeric:true});}
+
+/* ══ Patient Data ══ */
+const pts=[
+  {id:"100001",bed:"5A-12",diag:"CKD stage 3 + T2DM",age:"67",sex:"M",weight:"72",priority:"Critical",
+   creatinine:"2.8",sCr_date:"2026-03-25",egfr:22,
+   renalHistory:[{date:"2026-03-10",sCr:"3.1",egfr:19},{date:"2026-03-18",sCr:"2.9",egfr:21},{date:"2026-03-25",sCr:"2.8",egfr:22}],
+   meds:[
+     {name:"Metformin",dose:"500mg",freq:"BID",route:"PO",note:"eGFR<30 禁用，需停藥",abxStart:"",abxStop:""},
+     {name:"Amlodipine",dose:"5mg",freq:"QD",route:"PO",note:"",abxStart:"",abxStop:""},
+     {name:"Insulin glargine",dose:"16U",freq:"QN",route:"SC",note:"監測低血糖",abxStart:"",abxStop:""}
+   ],
+   electrolytes:"",electrolytes:"",electrolytes:"",electrolytes:"",electrolytes:"",otherLab:"HbA1c: 8.2%\nHb: 10.1 g/dL\nPlatelets: 215 K/uL",
+   culture:"Urine culture (2026-03-24): No growth",
+   nextLab:"2026-04-01",labNote:"",notes:"需停用 Metformin，通知醫師",lastIntv:"2026-03-25"},
+  {id:"100002",bed:"5A-08",diag:"AKI + HTN",age:"54",sex:"F",weight:"58",priority:"High",
+   creatinine:"1.9",sCr_date:"2026-03-26",egfr:38,
+   renalHistory:[{date:"2026-03-22",sCr:"2.6",egfr:26},{date:"2026-03-24",sCr:"2.2",egfr:32},{date:"2026-03-26",sCr:"1.9",egfr:38}],
+   meds:[
+     {name:"Losartan",dose:"50mg",freq:"QD",route:"PO",note:"AKI 期間暫停",abxStart:"",abxStop:""},
+     {name:"Furosemide",dose:"40mg",freq:"BID",route:"PO",note:"監測電解質",abxStart:"",abxStop:""}
+   ],
+   otherLab:"Albumin: 3.2 g/dL\nHb: 11.4 g/dL",culture:"",
+   nextLab:"2026-03-28",labNote:"",notes:"AKI 好轉中，明日複查 Cr",lastIntv:"2026-03-26"},
+  {id:"100003",bed:"5B-02",diag:"Sepsis + ESRD",age:"78",sex:"M",weight:"65",priority:"Critical",
+   creatinine:"5.6",sCr_date:"2026-03-27",egfr:9,
+   renalHistory:[{date:"2026-03-20",sCr:"4.8",egfr:12},{date:"2026-03-24",sCr:"5.2",egfr:10},{date:"2026-03-27",sCr:"5.6",egfr:9}],
+   meds:[
+     {name:"Vancomycin",dose:"1g",freq:"Q48H",route:"IV drip",note:"TDM 目標 trough 15-20",abxStart:"2026-03-20",abxStop:""},
+     {name:"Meropenem",dose:"0.5g",freq:"Q12H",route:"IV drip",note:"eGFR<10 減量",abxStart:"2026-03-22",abxStop:""},
+     {name:"Heparin",dose:"5000U",freq:"TID",route:"SC",note:"",abxStart:"",abxStop:""}
+   ],
+   otherLab:"WBC: 18.2 K/uL\nCRP: 142 mg/L\nProcalcitonin: 28.4 ng/mL\nAlbumin: 2.6 g/dL",
+   culture:"Blood culture (2026-03-26): Gram-positive cocci (pending sensitivity)\nSputum (2026-03-25): No growth",
+   nextLab:"2026-03-28",labNote:"空腹抽",notes:"TDM 結果待回，AUC 監測中",lastIntv:"2026-03-27"},
+  {id:"100004",bed:"5B-15",diag:"HTN + Hypothyroid",age:"45",sex:"F",weight:"61",priority:"Routine",
+   creatinine:"0.9",sCr_date:"2026-03-20",egfr:82,
+   renalHistory:[{date:"2026-03-20",sCr:"0.9",egfr:82}],
+   meds:[
+     {name:"Levothyroxine",dose:"50mcg",freq:"QD AC",route:"PO",note:"空腹，避免與鈣片同服",abxStart:"",abxStop:""},
+     {name:"Amlodipine",dose:"10mg",freq:"QD",route:"PO",note:"",abxStart:"",abxStop:""}
+   ],
+   otherLab:"TSH: 6.8 mIU/L (H)\nFT4: 0.9 ng/dL",culture:"",
+   nextLab:"2026-04-10",labNote:"",notes:"TSH 偏高，4/10 追蹤抽血",lastIntv:"2026-03-20"},
+  {id:"100005",bed:"5C-07",diag:"CHF + AF + CKD2",age:"82",sex:"M",weight:"68",priority:"High",
+   creatinine:"1.4",sCr_date:"2026-03-26",egfr:51,
+   renalHistory:[{date:"2026-03-15",sCr:"1.3",egfr:55},{date:"2026-03-20",sCr:"1.4",egfr:52},{date:"2026-03-26",sCr:"1.4",egfr:51}],
+   meds:[
+     {name:"Warfarin",dose:"3mg",freq:"QD",route:"PO",note:"INR 2.0-3.0，上次 1.6，劑量↑",abxStart:"",abxStop:""},
+     {name:"Digoxin",dose:"0.125mg",freq:"QD",route:"PO",note:"目標濃度 0.5-0.9 ng/mL",abxStart:"",abxStop:""},
+     {name:"Furosemide",dose:"20mg",freq:"QD",route:"PO",note:"",abxStart:"",abxStop:""}
+   ],
+   otherLab:"INR: 1.6 (L)\nBNP: 820 pg/mL\nHb: 10.8 g/dL",culture:"",
+   nextLab:"2026-03-29",labNote:"",notes:"INR 偏低，今日調整 Warfarin",lastIntv:"2026-03-26"}
+];
+
+
+function resetSampleData(){
+  // Called on logout — pts already cleared by splice above
+  // Sample data will be re-injected on next login if localStorage is empty
+}
+
+/* ══ Alerts ══ */
+function getAlerts(){
+  const a=[];
+  pts.forEach(p=>{
+    const s=kdigoStage(p.egfr);
+    if(p.egfr<15)a.push({t:'d',pid:p.id,bed:p.bed,priority:p.priority,msg:`eGFR ${p.egfr} (KDIGO ${s.g} — ${s.label})，需緊急確認所有用藥`});
+    else if(p.egfr<30)a.push({t:'w',pid:p.id,bed:p.bed,priority:p.priority,msg:`eGFR ${p.egfr} (KDIGO ${s.g})，多種藥物需劑量調整`});
+    p.meds.forEach(m=>{
+      if(m.note&&m.note.includes('禁用'))a.push({t:'d',pid:p.id,bed:p.bed,priority:p.priority,msg:`${m.name} ${m.dose} — ${m.note}`});
+      else if(m.note&&(m.note.includes('TDM')||m.note.includes('trough')))a.push({t:'w',pid:p.id,bed:p.bed,priority:p.priority,msg:`${m.name} — ${m.note}`});
+      else if(m.note&&m.note.includes('INR'))a.push({t:'i',pid:p.id,bed:p.bed,priority:p.priority,msg:`${m.name} — ${m.note}`});
+    });
+  });
+  a.sort((x,y)=>{
+    const pd=(PRIORITY_ORDER[x.priority]??99)-(PRIORITY_ORDER[y.priority]??99);
+    if(pd!==0)return pd;
+    return(x.bed||'').localeCompare(y.bed||'','zh-TW',{numeric:true});
+  });
+  return a;
+}
+
+let activeTab='patients',detailId=null,filterPriority='all',searchText='',pendingDeleteId=null;
+
+function switchTab(t){
+  activeTab=t;detailId=null;
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['patients','alerts','renal','labs','abxwatch'][i]===t));
+  render();
+}
+
+/* ══ Summary ══ */
+function renderSummary(){
+  const tot=pts.length,crit=pts.filter(p=>p.priority==='Critical').length,
+        high=pts.filter(p=>p.priority==='High').length,lowE=pts.filter(p=>p.egfr<30).length;
+  document.getElementById('sumcards').innerHTML=`
+    <div class="sc"><div class="n">${tot}</div><div class="l">總病患數</div></div>
+    <div class="sc"><div class="n" style="color:#A32D2D">${crit}</div><div class="l">Critical</div></div>
+    <div class="sc"><div class="n" style="color:#854F0B">${high}</div><div class="l">High Priority</div></div>
+    <div class="sc"><div class="n" style="color:#993C1D">${lowE}</div><div class="l">eGFR &lt;30 警示</div></div>`;
+  document.getElementById('hbadges').innerHTML=`
+    <span class="badge bc">Critical: ${crit}</span>
+    <span class="badge bh">High: ${high}</span>
+    <span class="badge bo">Routine: ${pts.filter(p=>p.priority==='Routine').length}</span>`;
+}
+
+/* ══ Patients Tab ══ */
+function renderPatients(){
+  if(detailId){renderDetail(detailId);return;}
+  let list=[...pts];
+  if(filterPriority!=='all')list=list.filter(p=>p.priority===filterPriority);
+  if(searchText)list=list.filter(p=>p.id.toLowerCase().includes(searchText.toLowerCase())||(p.bed||'').includes(searchText)||p.diag.toLowerCase().includes(searchText.toLowerCase()));
+  document.getElementById('viewroot').innerHTML=`
+    <div class="srow">
+      <input type="text" placeholder="搜尋編號 / 床號 / 診斷..." value="${searchText}" oninput="searchText=this.value;renderPatients()"/>
+      <select onchange="filterPriority=this.value;renderPatients()">
+        <option value="all" ${filterPriority==='all'?'selected':''}>所有優先等級</option>
+        <option value="Critical" ${filterPriority==='Critical'?'selected':''}>Critical</option>
+        <option value="High" ${filterPriority==='High'?'selected':''}>High</option>
+        <option value="Medium" ${filterPriority==='Medium'?'selected':''}>Medium</option>
+        <option value="Routine" ${filterPriority==='Routine'?'selected':''}>Routine</option>
+      </select>
+      <button class="add-btn" onclick="openModal()">＋ 新增病患</button>
+    </div>
+    <table class="ptbl">
+      <thead><tr>
+        <th>床號</th><th>編號</th><th>年齡/性別</th><th>診斷</th><th>優先等級</th>
+        <th>sCr (mg/dL)</th><th>eGFR</th><th>CCr</th><th>KDIGO</th><th>藥物數</th><th>操作</th>
+      </tr></thead>
+      <tbody>
+      ${list.map(p=>{
+        const s=kdigoStage(p.egfr),ccr=calcCCr(p.age,p.weight,p.creatinine,p.sex);
+        return`<tr>
+          <td style="font-weight:500">${p.bed||'—'}</td>
+          <td style="font-weight:500;color:var(--tx2);font-size:12px">${p.id}</td>
+          <td>${p.age}歲 ${p.sex==='F'?'♀':'♂'}</td>
+          <td style="font-size:12px;max-width:140px">${p.diag}</td>
+          <td><span class="ptag ${pClass(p.priority)}">${p.priority}</span></td>
+          <td>${p.creatinine}<br><span style="font-size:11px;color:var(--tx2)">${p.sCr_date}</span></td>
+          <td><span class="dot ${p.egfr<15?'dr':p.egfr<30?'da':'dg'}"></span><strong>${p.egfr}</strong></td>
+          <td style="font-size:12px">${ccr!=null?ccr+' mL/min':'—'}</td>
+          <td><span class="ptag" style="background:${s.color}22;color:${s.color}">${s.g}</span></td>
+          <td>${p.meds.length}</td>
+          <td style="white-space:nowrap">
+            <button class="acbtn" onclick="detailId='${p.id}';renderPatients()">詳情</button>
+            <button class="delbtn" onclick="confirmDelete('${p.id}')">🗑</button>
+          </td>
+        </tr>`;
+      }).join('')}
+      </tbody>
+    </table>`;
+}
+
+/* ══ Detail ══ */
+function renderDetail(pid){
+  const p=pts.find(x=>x.id===pid);
+  if(!p){detailId=null;renderPatients();return;}
+  const s=kdigoStage(p.egfr),pct=Math.min(100,(p.egfr/120)*100),ccr=calcCCr(p.age,p.weight,p.creatinine,p.sex);
+  document.getElementById('viewroot').innerHTML=`
+    <button class="back-btn" onclick="detailId=null;renderPatients()">← 返回病患列表</button>
+    <div class="dcard">
+      <h3>
+        <span class="ptag ${pClass(p.priority)}">${p.priority}</span>
+        <span style="font-size:15px;font-weight:500">${p.bed||'—'}</span>
+        <span style="color:var(--tx2);font-size:12px;font-weight:400">${p.id}</span>
+        <span style="font-size:13px;color:var(--tx2);font-weight:400">${p.age}歲・${p.sex==='F'?'女':'男'}・${p.weight}kg</span>
+        <button class="delbtn" style="margin-left:auto;padding:4px 12px" onclick="confirmDelete('${p.id}')">🗑 刪除</button>
+      </h3>
+      <div class="dgrid">
+        <div class="di"><div class="lb">診斷</div><div class="vl" style="font-weight:400;font-size:13px">${p.diag}</div></div>
+        <div class="di"><div class="lb">最後介入</div><div class="vl">${p.lastIntv}</div></div>
+        <div class="di" style="grid-column:1/-1"><div class="lb">藥師備註</div><div class="vl" style="font-weight:400;font-size:12.5px">${p.notes}</div></div>
+      </div>
+    </div>
+    <div class="tcol">
+      <div class="dcard" style="margin:0">
+        <h3 style="font-size:13px;margin-bottom:9px">腎功能 — KDIGO 2024</h3>
+        <div style="margin-bottom:8px">
+          <div style="font-size:11px;color:var(--tx2)">Creatinine <span style="float:right">${p.sCr_date}</span></div>
+          <div style="font-size:20px;font-weight:500">${p.creatinine}<span style="font-size:12px;font-weight:400;color:var(--tx2)"> mg/dL</span></div>
+        </div>
+        <div style="font-size:11px;color:var(--tx2);margin-bottom:2px">eGFR (CKD-EPI)</div>
+        <div style="font-size:20px;font-weight:500">${p.egfr}<span style="font-size:12px;font-weight:400"> mL/min/1.73m²</span></div>
+        <div class="egfr-bg"><div class="egfr-fill" style="width:${pct}%;background:${s.color}"></div></div>
+        <div class="egfr-stages"><span>G5&lt;15</span><span>G4 15</span><span>G3b 30</span><span>G3a 45</span><span>G2 60</span><span>G1 90+</span></div>
+        <div style="margin-top:8px"><span class="ptag" style="background:${s.color}22;color:${s.color}">${s.g} — ${s.label}</span></div>
+        <div style="margin-top:9px;font-size:11px;color:var(--tx2)">CCr (Cockcroft-Gault)</div>
+        <div style="font-size:16px;font-weight:500;margin-top:2px">${ccr!=null?ccr+' mL/min':'資料不足'}</div>
+      </div>
+      <div class="dcard" style="margin:0">
+        <h3 style="font-size:13px;margin-bottom:9px">電解質</h3>
+        <div class="extra-section">
+          <textarea style="min-height:90px" onchange="saveField('${p.id}','electrolytes',this.value)" placeholder="Na⁺, K⁺, BUN, Mg²⁺ 等數值...">${p.electrolytes||''}</textarea>
+        </div>
+      </div>
+    </div>
+    <div class="dcard">
+      <h3 style="font-size:13px;margin-bottom:8px">Other Lab Data</h3>
+      <div class="extra-section"><textarea onchange="saveField('${p.id}','otherLab',this.value)">${p.otherLab||''}</textarea></div>
+    </div>
+    <div class="dcard">
+      <h3 style="font-size:13px;margin-bottom:8px">Culture Result</h3>
+      <div class="extra-section"><textarea onchange="saveField('${p.id}','culture',this.value)">${p.culture||''}</textarea></div>
+    </div>
+    <div class="dcard">
+      <h3 style="font-size:13px;margin-bottom:9px">用藥清單</h3>
+      <table class="med-tbl">
+        <thead><tr>
+          <th style="width:27%">藥名</th><th style="width:14%">劑量</th>
+          <th style="width:17%">頻次</th><th style="width:13%">途徑</th>
+          <th style="width:24%">備註 / 警示</th><th style="width:5%"></th>
+        </tr></thead>
+        <tbody>
+        ${p.meds.map((m,i)=>`<tr>
+          <td><input value="${m.name}" onchange="saveMed('${p.id}',${i},'name',this.value)"/></td>
+          <td><input value="${m.dose}" onchange="saveMed('${p.id}',${i},'dose',this.value)"/></td>
+          <td><select onchange="saveMed('${p.id}',${i},'freq',this.value)">
+            ${FREQ_OPTIONS.map(f=>`<option ${m.freq===f?'selected':''}>${f}</option>`).join('')}
+            ${!FREQ_OPTIONS.includes(m.freq)?`<option selected value="${m.freq}">${m.freq}</option>`:''}
+          </select></td>
+          <td><select onchange="saveMed('${p.id}',${i},'route',this.value)">
+            ${ROUTE_OPTIONS.map(r=>`<option ${m.route===r?'selected':''}>${r}</option>`).join('')}
+          </select></td>
+          <td><input value="${m.note}" onchange="saveMed('${p.id}',${i},'note',this.value)" placeholder="備註"/></td>
+          <td><button class="del-med-btn" onclick="deleteMed('${p.id}',${i})">✕</button></td>
+        </tr>`).join('')}
+        </tbody>
+      </table>
+      <button class="add-med-btn" onclick="addMed('${p.id}')">＋ 新增藥物</button>
+    </div>
+    ${renderAbxTracker(p)}
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:1.5rem">
+      <button class="acbtn" style="padding:5px 13px" disabled>AI 藥物建議（需 Claude 環境）</button>
+      <button class="acbtn" style="padding:5px 13px" disabled>腎功能劑量調整（需 Claude 環境）</button>
+      <button class="acbtn" style="padding:5px 13px" disabled>TDM 監測建議（需 Claude 環境）</button>
+    </div>`;
+}
+
+/* ══ ABX Tracker ══ */
+function renderAbxTracker(p){
+  const abxMeds=p.meds.filter(m=>isAntibiotic(m.name));
+  if(abxMeds.length===0)return'';
+  const today=new Date().toISOString().split('T')[0];
+  const rows=abxMeds.map(m=>{
+    const origIdx=p.meds.indexOf(m);
+    const start=m.abxStart||'',stop=m.abxStop||'';
+    let days='—',statusColor='var(--tx2)',statusLabel='未設定開始日';
+    if(start){
+      const s=new Date(start),endDate=stop?new Date(stop):new Date();
+      const diff=Math.ceil((endDate-s)/(1000*60*60*24));
+      days=diff>=0?diff+' 天':'—';
+      if(stop){statusLabel='已停藥';statusColor='#639922';}
+      else{statusLabel='使用中';statusColor=diff>14?'#A32D2D':diff>7?'#854F0B':'#185FA5';}
+    }
+    const generics=getGenericNames(m.name);
+    const genericLabel=generics.length>0?generics.map(g=>g.charAt(0).toUpperCase()+g.slice(1)).join(' / '):'—';
+    return`<tr>
+      <td style="font-weight:500">${m.name}</td>
+      <td style="font-size:12px;color:#185FA5">${genericLabel}</td>
+      <td style="font-size:12px;color:var(--tx2)">${m.dose} ${m.freq} ${m.route}</td>
+      <td><input type="date" value="${start}" style="height:27px;font-size:12px;width:130px"
+        onchange="saveMed('${p.id}',${origIdx},'abxStart',this.value);renderDetail('${p.id}')"/></td>
+      <td><input type="date" value="${stop}" style="height:27px;font-size:12px;width:130px"
+        onchange="saveMed('${p.id}',${origIdx},'abxStop',this.value);renderDetail('${p.id}')"/></td>
+      <td style="font-weight:500;font-size:14px;color:${statusColor}">${days}</td>
+      <td><span class="ptag" style="background:${statusColor}22;color:${statusColor};font-size:11px">${statusLabel}</span></td>
+    </tr>`;
+  }).join('');
+  return`<div class="dcard">
+    <h3 style="font-size:13px;margin-bottom:9px">🦠 抗生素使用追蹤
+      <span style="font-size:11px;font-weight:400;color:var(--tx2);margin-left:4px">僅顯示院內抗生素品項</span>
+    </h3>
+    <table class="med-tbl">
+      <thead><tr>
+        <th style="width:16%">抗生素（商品名）</th>
+        <th style="width:18%">學名</th>
+        <th style="width:17%">劑量 / 頻次 / 途徑</th>
+        <th style="width:16%">開始日期</th>
+        <th style="width:16%">停藥日期</th>
+        <th style="width:8%">使用天數</th>
+        <th style="width:9%">狀態</th>
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+  </div>`;
+}
+
+function saveField(pid,field,val){const p=pts.find(x=>x.id===pid);if(p){p[field]=val;saveData();}}
+function saveMed(pid,idx,field,val){const p=pts.find(x=>x.id===pid);if(p&&p.meds[idx]){p.meds[idx][field]=val;saveData();}}
+function deleteMed(pid,idx){const p=pts.find(x=>x.id===pid);if(p){p.meds.splice(idx,1);saveData();renderDetail(pid);}}
+function addMed(pid){const p=pts.find(x=>x.id===pid);if(p){p.meds.push({name:'',dose:'',freq:'QD',route:'PO',note:'',abxStart:'',abxStop:''});renderDetail(pid);}}
+
+/* ══ Alerts Tab ══ */
+function renderAlerts(){
+  const al=getAlerts();
+  document.getElementById('viewroot').innerHTML=`
+    <div style="font-size:12.5px;color:var(--tx2);margin-bottom:.9rem">
+      共 ${al.length} 項待處理警示・依優先等級排列，同等級內依床號順序
+    </div>
+    ${al.length===0?'<div style="padding:2rem;text-align:center;color:var(--tx2);font-size:13px">目前無待處理警示</div>':''}
+    ${al.map(a=>`
+      <div class="ai ${a.t==='d'?'ad':a.t==='w'?'aw':'ainfo'}" onclick="detailId='${a.pid}';switchTab('patients')">
+        <span style="font-size:15px;flex-shrink:0;margin-top:1px">${a.t==='d'?'⚠':a.t==='w'?'●':'ℹ'}</span>
+        <div style="flex:1">
+          <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+            <span style="font-weight:500">床號 ${a.bed||'—'}</span>
+            <span style="font-size:11px;opacity:.7">${a.pid}</span>
+            <span class="ptag ${pClass(a.priority)}" style="font-size:10px">${a.priority}</span>
+          </div>
+          <div style="font-size:12px;margin-top:2px">${a.msg}</div>
+        </div>
+      </div>`).join('')}`;
+}
+
+/* ══ Renal Tab ══ */
+function renderRenal(){
+  const stages=[{g:'G1',c:'#1D9E75',r:'≥90'},{g:'G2',c:'#639922',r:'60–89'},{g:'G3a',c:'#EF9F27',r:'45–59'},{g:'G3b',c:'#BA7517',r:'30–44'},{g:'G4',c:'#E24B4A',r:'15–29'},{g:'G5',c:'#A32D2D',r:'<15'}];
+  document.getElementById('viewroot').innerHTML=`
+    <div class="kdigo-legend">
+      <span>KDIGO 2024 GFR 分期：</span>
+      ${stages.map(s=>`<div class="kl-item"><div class="kl-dot" style="background:${s.c}25;border:1px solid ${s.c}"></div><span style="color:${s.c};font-weight:500">${s.g}</span><span style="color:var(--tx2)">(${s.r})</span></div>`).join('')}
+    </div>
+    <table class="ptbl">
+      <thead><tr>
+        <th>床號</th><th>編號</th>
+        <th>sCr (mg/dL)<br><span style="font-weight:400;font-size:10px">可直接修改</span></th>
+        <th>eGFR<br><span style="font-weight:400;font-size:10px">可直接修改</span></th>
+        <th>CCr (mL/min)</th><th>GFR 分期</th><th>趨勢</th>
+        <th>住院期間腎功能變化<br><span style="font-weight:400;font-size:10px">可新增紀錄</span></th>
+        <th></th>
+      </tr></thead>
+      <tbody>
+      ${pts.map(p=>{
+        const s=kdigoStage(p.egfr),ccr=calcCCr(p.age,p.weight,p.creatinine,p.sex);
+        const hist=p.renalHistory||[];
+        let trend='—';
+        if(hist.length>=2){
+          const prev=hist[hist.length-2].egfr,curr=hist[hist.length-1].egfr,diff=curr-prev;
+          if(diff>2)trend=`<span style="color:#3B6D11">↑ 改善 (+${diff})</span>`;
+          else if(diff<-2)trend=`<span style="color:#A32D2D">↓ 惡化 (${diff})</span>`;
+          else trend=`<span style="color:var(--tx2)">→ 穩定</span>`;
+        }else if(hist.length===1){trend='<span style="color:var(--tx2)">初次記錄</span>';}
+        return`<tr>
+          <td style="font-weight:500">${p.bed||'—'}</td>
+          <td style="font-size:12px;color:var(--tx2)">${p.id}</td>
+          <td><input type="number" step="0.1" min="0" value="${p.creatinine}"
+            style="width:72px;height:27px;font-size:12.5px;text-align:center"
+            onchange="saveField('${p.id}','creatinine',this.value);saveField('${p.id}','sCr_date',new Date().toISOString().split('T')[0]);render()"/></td>
+          <td>
+            <div style="display:flex;align-items:center;gap:5px">
+              <div style="width:36px;height:6px;border-radius:3px;background:var(--bg2);overflow:hidden">
+                <div style="width:${Math.min(100,(p.egfr/120)*100)}%;height:100%;background:${s.color}"></div>
+              </div>
+              <input type="number" min="0" max="200" value="${p.egfr}"
+                style="width:52px;height:27px;font-size:12.5px;text-align:center"
+                onchange="saveField('${p.id}','egfr',parseInt(this.value)||0);render()"/>
+            </div>
+          </td>
+          <td style="font-weight:500;font-size:13px">${ccr!=null?ccr:'—'}</td>
+          <td><span class="ptag" style="background:${s.color}22;color:${s.color}">${s.g} — ${s.label}</span></td>
+          <td style="font-size:12.5px">${trend}</td>
+          <td>
+            <div style="max-height:120px;overflow-y:auto">
+              <table class="hist-tbl">
+                <thead><tr><th>日期</th><th>sCr</th><th>eGFR</th><th></th></tr></thead>
+                <tbody>
+                ${hist.map((h,i)=>`<tr>
+                  <td><input type="date" value="${h.date}" style="width:110px" onchange="saveHist('${p.id}',${i},'date',this.value)"/></td>
+                  <td><input type="number" step="0.1" value="${h.sCr}" style="width:56px" onchange="saveHist('${p.id}',${i},'sCr',this.value)"/></td>
+                  <td><input type="number" value="${h.egfr}" style="width:50px" onchange="saveHist('${p.id}',${i},'egfr',parseInt(this.value)||0)"/></td>
+                  <td><button class="del-med-btn" onclick="deleteHist('${p.id}',${i})">✕</button></td>
+                </tr>`).join('')}
+                </tbody>
+              </table>
+            </div>
+            <button class="add-hist-btn" onclick="addHist('${p.id}')">＋ 新增</button>
+          </td>
+          <td style="white-space:nowrap;vertical-align:top;padding-top:10px">
+            <button class="delbtn" onclick="confirmDeleteRenal('${p.id}')">🗑</button>
+          </td>
+        </tr>`;
+      }).join('')}
+      </tbody>
+    </table>`;
+}
+
+function saveHist(pid,idx,field,val){const p=pts.find(x=>x.id===pid);if(p&&p.renalHistory[idx])p.renalHistory[idx][field]=field==='egfr'?parseInt(val)||0:val;}
+function deleteHist(pid,idx){const p=pts.find(x=>x.id===pid);if(p){p.renalHistory.splice(idx,1);saveData();renderRenal();}}
+function addHist(pid){const p=pts.find(x=>x.id===pid);if(p){const t=new Date().toISOString().split('T')[0];p.renalHistory.push({date:t,sCr:p.creatinine,egfr:p.egfr});saveData();renderRenal();}}
+
+/* ══ Labs Tab ══ */
+function renderLabs(){
+  const today=new Date();
+  const sorted=[...pts].sort((a,b)=>{
+    if(!a.nextLab&&!b.nextLab)return bedSort(a,b);
+    if(!a.nextLab)return 1;if(!b.nextLab)return -1;
+    return new Date(a.nextLab)-new Date(b.nextLab);
+  });
+  document.getElementById('viewroot').innerHTML=`
+    <div style="font-size:12.5px;color:var(--tx2);margin-bottom:1rem">依下次抽血日期排序・紅色邊框表示已逾期</div>
+    <table class="ptbl">
+      <thead><tr>
+        <th>床號</th><th>編號</th><th>診斷</th><th>優先等級</th>
+        <th>下次抽血日期<br><span style="font-weight:400;font-size:10px">點擊選取日期</span></th>
+        <th>備註</th><th></th>
+      </tr></thead>
+      <tbody>
+      ${sorted.map(p=>{
+        const overdue=p.nextLab&&new Date(p.nextLab)<today;
+        const daysLeft=p.nextLab?Math.ceil((new Date(p.nextLab)-today)/(1000*60*60*24)):null;
+        return`<tr>
+          <td style="font-weight:500">${p.bed||'—'}</td>
+          <td style="font-size:12px;color:var(--tx2)">${p.id}</td>
+          <td style="font-size:12px">${p.diag}</td>
+          <td><span class="ptag ${pClass(p.priority)}">${p.priority}</span></td>
+          <td>
+            <input type="date" value="${p.nextLab||''}"
+              style="height:28px;font-size:12px;border-color:${overdue?'#E24B4A':'var(--bd2)'};width:140px"
+              onchange="saveField('${p.id}','nextLab',this.value);renderLabs()"/>
+            ${overdue?`<div style="font-size:10.5px;color:#A32D2D;margin-top:2px">已逾期</div>`:daysLeft===0?`<div style="font-size:10.5px;color:#854F0B;margin-top:2px">今日</div>`:daysLeft===1?`<div style="font-size:10.5px;color:#854F0B;margin-top:2px">明日</div>`:daysLeft!=null?`<div style="font-size:10.5px;color:var(--tx2);margin-top:2px">${daysLeft} 天後</div>`:''}
+          </td>
+          <td><input value="${p.labNote||''}" placeholder="備註…" style="width:140px;height:27px;font-size:12px" onchange="saveField('${p.id}','labNote',this.value)"/></td>
+          <td><button class="delbtn" onclick="confirmDeleteLab('${p.id}')">🗑</button></td>
+        </tr>`;
+      }).join('')}
+      </tbody>
+    </table>`;
+}
+
+/* ══ Delete: Renal only ══ */
+function confirmDeleteRenal(pid){
+  const p=pts.find(x=>x.id===pid);if(!p)return;
+  pendingDeleteId=pid;
+  document.getElementById('confirmroot').innerHTML=`
+    <div class="confirm-backdrop" onclick="if(event.target===this)cancelDelete()">
+      <div class="confirm-box">
+        <h4>清除腎功能紀錄</h4>
+        <p>確定要清除床號 <strong>${p.bed||'—'}</strong>（${p.id}）的所有住院腎功能歷史紀錄嗎？<br>其他病患資料不受影響。</p>
+        <div class="confirm-btns">
+          <button class="cbtn-cancel" onclick="cancelDelete()">取消</button>
+          <button class="cbtn-del" onclick="doDeleteRenal()">確認清除</button>
+        </div>
+      </div>
+    </div>`;
+}
+function doDeleteRenal(){const p=pts.find(x=>x.id===pendingDeleteId);if(p)p.renalHistory=[];pendingDeleteId=null;saveData();document.getElementById('confirmroot').innerHTML='';renderRenal();}
+
+/* ══ Delete: Lab only ══ */
+function confirmDeleteLab(pid){
+  const p=pts.find(x=>x.id===pid);if(!p)return;
+  pendingDeleteId=pid;
+  document.getElementById('confirmroot').innerHTML=`
+    <div class="confirm-backdrop" onclick="if(event.target===this)cancelDelete()">
+      <div class="confirm-box">
+        <h4>清除抽血時間</h4>
+        <p>確定要清除床號 <strong>${p.bed||'—'}</strong>（${p.id}）的下次抽血日期與備註嗎？<br>其他病患資料不受影響。</p>
+        <div class="confirm-btns">
+          <button class="cbtn-cancel" onclick="cancelDelete()">取消</button>
+          <button class="cbtn-del" onclick="doDeleteLab()">確認清除</button>
+        </div>
+      </div>
+    </div>`;
+}
+function doDeleteLab(){const p=pts.find(x=>x.id===pendingDeleteId);if(p){p.nextLab='';p.labNote='';}pendingDeleteId=null;saveData();document.getElementById('confirmroot').innerHTML='';renderLabs();}
+
+/* ══ Delete: Full patient ══ */
+function confirmDelete(pid){
+  const p=pts.find(x=>x.id===pid);if(!p)return;
+  pendingDeleteId=pid;
+  document.getElementById('confirmroot').innerHTML=`
+    <div class="confirm-backdrop" onclick="if(event.target===this)cancelDelete()">
+      <div class="confirm-box">
+        <h4>確認刪除病患</h4>
+        <p>確定要刪除床號 <strong>${p.bed||'—'}</strong>（${p.id}）的所有資料？<br>此操作無法復原。</p>
+        <div class="confirm-btns">
+          <button class="cbtn-cancel" onclick="cancelDelete()">取消</button>
+          <button class="cbtn-del" onclick="doDelete()">確認刪除</button>
+        </div>
+      </div>
+    </div>`;
+}
+function cancelDelete(){pendingDeleteId=null;document.getElementById('confirmroot').innerHTML='';}
+function doDelete(){
+  if(!pendingDeleteId)return;
+  const idx=pts.findIndex(p=>p.id===pendingDeleteId);
+  if(idx>-1)pts.splice(idx,1);
+  if(detailId===pendingDeleteId)detailId=null;
+  pendingDeleteId=null;
+  saveData();
+  document.getElementById('confirmroot').innerHTML='';
+  render();
+}
+
+/* ══ Modal ══ */
+let modalMeds=[{name:'',dose:'',freq:'QD',route:'PO',note:'',abxStart:'',abxStop:''}];
+function openModal(){modalMeds=[{name:'',dose:'',freq:'QD',route:'PO',note:'',abxStart:'',abxStop:''}];renderModal();}
+function renderModal(){
+  document.getElementById('modalroot').innerHTML=`
+    <div class="modal-bd" onclick="if(event.target===this)closeModal()">
+      <div class="modal">
+        <h2>新增病患</h2>
+        <div class="fgrid">
+          <div class="fg"><label>床號</label><input id="m-bed" placeholder="5A-12"/></div>
+          <div class="fg"><label>編號</label><input id="m-id" placeholder="123456"/></div>
+          <div class="fg"><label>年齡</label><input id="m-age" type="number" placeholder="歲"/></div>
+          <div class="fg"><label>性別</label><select id="m-sex"><option value="M">男 (M)</option><option value="F">女 (F)</option></select></div>
+          <div class="fg"><label>體重 (kg)</label><input id="m-wt" type="number" placeholder="kg"/></div>
+          <div class="fg full"><label>診斷</label><input id="m-diag" placeholder="主要診斷"/></div>
+          <div class="fg"><label>Creatinine (mg/dL)</label><input type="number" step="0.1" id="m-cr" placeholder="0.0"/></div>
+          <div class="fg"><label>eGFR (mL/min/1.73m²)</label><input type="number" id="m-egfr" placeholder="0"/></div>
+          <div class="fg"><label>優先等級</label>
+            <select id="m-pri"><option>Critical</option><option>High</option><option>Medium</option><option>Low</option><option selected>Routine</option></select>
+          </div>
+          <div class="fg"><label>介入日期</label><input type="date" id="m-date"/></div>
+          <div class="fg"><label>下次抽血日期</label><input type="date" id="m-nextlab"/></div>
+        </div>
+        <div style="font-size:11px;color:var(--tx2);margin:4px 0 6px;font-weight:500">用藥清單</div>
+        <table class="modal-med-tbl">
+          <thead><tr>
+            <th style="width:27%">藥名</th><th style="width:15%">劑量</th>
+            <th style="width:18%">頻次</th><th style="width:13%">途徑</th>
+            <th style="width:22%">備註</th><th style="width:5%"></th>
+          </tr></thead>
+          <tbody>
+          ${modalMeds.map((m,i)=>`<tr>
+            <td><input placeholder="藥名" oninput="modalMeds[${i}].name=this.value"/></td>
+            <td><input placeholder="劑量" oninput="modalMeds[${i}].dose=this.value"/></td>
+            <td><select onchange="modalMeds[${i}].freq=this.value">${FREQ_OPTIONS.map(f=>`<option>${f}</option>`).join('')}</select></td>
+            <td><select onchange="modalMeds[${i}].route=this.value">${ROUTE_OPTIONS.map(r=>`<option>${r}</option>`).join('')}</select></td>
+            <td><input placeholder="備註" oninput="modalMeds[${i}].note=this.value"/></td>
+            <td><button class="del-med-btn" onclick="removeModalMed(${i})">✕</button></td>
+          </tr>`).join('')}
+          </tbody>
+        </table>
+        <button class="add-med-btn" onclick="addModalMed()">＋ 新增藥物</button>
+        <div style="margin-top:1rem;display:flex;flex-direction:column;gap:9px">
+          <div class="fg"><label>Other Lab Data</label><textarea id="m-otherlab" placeholder="HbA1c, CBC, CRP..."></textarea></div>
+          <div class="fg"><label>Culture Result</label><textarea id="m-culture" placeholder="Blood culture, Urine culture..."></textarea></div>
+          <div class="fg"><label>藥師備註</label><textarea id="m-notes" placeholder="介入說明、待追蹤事項…"></textarea></div>
+        </div>
+        <div class="mbtns" style="margin-top:1rem">
+          <button class="mbcancel" onclick="closeModal()">取消</button>
+          <button class="mbsave" onclick="savePatient()">儲存</button>
+        </div>
+      </div>
+    </div>`;
+}
+function addModalMed(){modalMeds.push({name:'',dose:'',freq:'QD',route:'PO',note:'',abxStart:'',abxStop:''});renderModal();}
+function removeModalMed(i){modalMeds.splice(i,1);if(modalMeds.length===0)modalMeds=[{name:'',dose:'',freq:'QD',route:'PO',note:'',abxStart:'',abxStop:''}];renderModal();}
+function closeModal(){document.getElementById('modalroot').innerHTML='';}
+function savePatient(){
+  const today=new Date().toISOString().split('T')[0];
+  const cr=document.getElementById('m-cr').value||'0';
+  const egfr=parseInt(document.getElementById('m-egfr').value)||60;
+  pts.push({
+    id:document.getElementById('m-id').value||'NEW',
+    bed:document.getElementById('m-bed').value||'',
+    age:document.getElementById('m-age').value||'—',
+    sex:document.getElementById('m-sex').value||'M',
+    weight:document.getElementById('m-wt').value||'—',
+    diag:document.getElementById('m-diag').value||'—',
+    priority:document.getElementById('m-pri').value,
+    creatinine:cr,sCr_date:document.getElementById('m-date').value||today,egfr:egfr,
+    renalHistory:[{date:document.getElementById('m-date').value||today,sCr:cr,egfr:egfr}],
+    meds:modalMeds.filter(m=>m.name).map(m=>({...m,abxStart:m.abxStart||'',abxStop:m.abxStop||''})),
+    electrolytes:'',
+    otherLab:document.getElementById('m-otherlab').value||'',
+    culture:document.getElementById('m-culture').value||'',
+    notes:document.getElementById('m-notes').value||'',
+    nextLab:document.getElementById('m-nextlab').value||'',labNote:'',
+    lastIntv:document.getElementById('m-date').value||today
+  });
+  saveData();closeModal();render();
+}
+
+
+/* ══ ABX Watch Tab ══ */
+const WATCHED_ABX = ['tazocin','cravit','ciproxin','avelox','zavicefta','mepem','meropenem','imipenem','brosym','zerbaxa'];
+
+function isWatchedAbx(name){
+  if(!name) return false;
+  const n = name.trim().toLowerCase();
+  return WATCHED_ABX.some(w => n.includes(w));
+}
+
+function renderAbxWatch(){
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  // Collect all watched ABX across all patients
+  const rows = [];
+  pts.forEach(p => {
+    p.meds.forEach(m => {
+      if(!isWatchedAbx(m.name)) return;
+      const start = m.abxStart || '';
+      let days = null, status = 'no-start', daysLabel = '—';
+      if(start){
+        const s = new Date(start);
+        s.setHours(0,0,0,0);
+        const endDate = m.abxStop ? new Date(m.abxStop) : today;
+        endDate.setHours(0,0,0,0);
+        days = Math.ceil((endDate - s) / (1000*60*60*24));
+        if(days < 0) days = 0;
+        daysLabel = days + ' 天';
+        if(m.abxStop) status = 'stopped';
+        else if(days > 14) status = 'over14';
+        else if(days > 7)  status = 'over7';
+        else               status = 'active';
+      }
+      rows.push({p, m, days, daysLabel, status, start, stop: m.abxStop||''});
+    });
+  });
+
+  // Sort: over14 first → over7 → active → stopped → no-start; within group by days desc
+  const ORDER = {over14:0, over7:1, active:2, stopped:3, 'no-start':4};
+  rows.sort((a,b) => {
+    const sd = (ORDER[a.status]??9) - (ORDER[b.status]??9);
+    if(sd !== 0) return sd;
+    return (b.days??-1) - (a.days??-1);
+  });
+
+  const over14Count = rows.filter(r=>r.status==='over14').length;
+  const activeCount = rows.filter(r=>r.status==='active'||r.status==='over7'||r.status==='over14').length;
+
+  document.getElementById('viewroot').innerHTML = `
+    <div style="display:flex;gap:10px;margin-bottom:1.2rem;flex-wrap:wrap">
+      <div class="sc" style="flex:1;min-width:140px">
+        <div class="n" style="color:${over14Count>0?'#B91C1C':'var(--tx)'}">${over14Count}</div>
+        <div class="l">超過 14 天警示</div>
+      </div>
+      <div class="sc" style="flex:1;min-width:140px">
+        <div class="n" style="color:#0E7490">${activeCount}</div>
+        <div class="l">目前使用中</div>
+      </div>
+      <div class="sc" style="flex:1;min-width:140px">
+        <div class="n">${rows.filter(r=>r.status==='stopped').length}</div>
+        <div class="l">已停藥</div>
+      </div>
+      <div class="sc" style="flex:1;min-width:140px">
+        <div class="n">${rows.length}</div>
+        <div class="l">監測品項總數</div>
+      </div>
+    </div>
+
+    <div style="font-size:11.5px;color:var(--tx2);margin-bottom:10px;background:var(--bg-card);border:1px solid var(--bd);border-radius:var(--r);padding:8px 12px">
+      監測品項：<span style="font-weight:600;color:var(--grad-end)">Tazocin・Cravit・Ciproxin・Avelox・Zavicefta・Mepem・Imipenem/Cilastatin・Brosym・Zerbaxa</span>
+    </div>
+
+    ${rows.length === 0 ? `<div style="text-align:center;padding:3rem;color:var(--tx2);font-size:13px">目前無病患使用監測抗生素品項</div>` : ''}
+
+    <table class="ptbl">
+      <thead><tr>
+        <th>床號</th>
+        <th>編號</th>
+        <th>診斷</th>
+        <th>優先等級</th>
+        <th>抗生素</th>
+        <th>學名</th>
+        <th>劑量 / 頻次</th>
+        <th>開始日期</th>
+        <th>停藥日期</th>
+        <th style="text-align:center">使用天數</th>
+        <th>狀態</th>
+      </tr></thead>
+      <tbody>
+      ${rows.map(({p, m, days, daysLabel, status, start, stop}) => {
+        const generics = getGenericNames(m.name);
+        const genericLabel = generics.length > 0
+          ? generics.map(g => g.charAt(0).toUpperCase()+g.slice(1)).join(' / ')
+          : '—';
+
+        // Row highlight for over14
+        const rowBg = status === 'over14'
+          ? 'background:linear-gradient(90deg,rgba(254,226,226,0.5),transparent)'
+          : '';
+
+        // Days cell style
+        const dayColor = status==='over14' ? '#B91C1C'
+          : status==='over7'  ? '#92400E'
+          : status==='active' ? '#1E40AF'
+          : status==='stopped'? '#166534'
+          : 'var(--tx2)';
+
+        // Status badge
+        const [badgeBg, badgeColor, badgeText] =
+          status==='over14'  ? ['#FEE2E2','#B91C1C','⚠ 超過 14 天'] :
+          status==='over7'   ? ['#FEF3C7','#92400E','● 超過 7 天']  :
+          status==='active'  ? ['#DBEAFE','#1E40AF','使用中']        :
+          status==='stopped' ? ['#DCFCE7','#166534','已停藥']        :
+                               ['#F1F5F9','#475569','未設定'];
+
+        const origIdx = p.meds.indexOf(m);
+
+        return `<tr style="${rowBg}">
+          <td style="font-weight:600">${p.bed||'—'}</td>
+          <td style="font-size:12px;color:var(--tx2)">${p.id}</td>
+          <td style="font-size:12px;max-width:120px">${p.diag}</td>
+          <td><span class="ptag ${pClass(p.priority)}">${p.priority}</span></td>
+          <td style="font-weight:600">${m.name}</td>
+          <td style="font-size:12px;color:#0E7490">${genericLabel}</td>
+          <td style="font-size:12px;color:var(--tx2)">${m.dose} ${m.freq}</td>
+          <td>
+            <input type="date" value="${start}"
+              style="height:27px;font-size:11.5px;width:126px"
+              onchange="saveMed('${p.id}',${origIdx},'abxStart',this.value);renderAbxWatch()"/>
+          </td>
+          <td>
+            <input type="date" value="${stop}"
+              style="height:27px;font-size:11.5px;width:126px"
+              onchange="saveMed('${p.id}',${origIdx},'abxStop',this.value);renderAbxWatch()"/>
+          </td>
+          <td style="text-align:center;font-size:15px;font-weight:700;color:${dayColor}">${daysLabel}</td>
+          <td>
+            <span class="ptag" style="background:${badgeBg};color:${badgeColor};border:1px solid ${badgeColor}33">
+              ${badgeText}
+            </span>
+          </td>
+        </tr>`;
+      }).join('')}
+      </tbody>
+    </table>`;
+}
+
+/* ══ Main render ══ */
+function render(){
+  renderSummary();
+  if(activeTab==='patients')renderPatients();
+  else if(activeTab==='alerts')renderAlerts();
+  else if(activeTab==='renal')renderRenal();
+  else if(activeTab==='abxwatch')renderAbxWatch();
+  else renderLabs();
+}
+// render() is called after login, not on page load
+</script>
+</body>
+</html>
