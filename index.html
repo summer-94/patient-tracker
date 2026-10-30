@@ -7,50 +7,62 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --grad-start:#1B2A4A;
-  --grad-mid:#0E4F72;
-  --grad-end:#0E7490;
-  --grad-accent:#06B6D4;
-  --bg:#F0F4F8;
-  --bg-card:#ffffff;
-  --bg2:#EBF4F8;
-  --bg3:#E2EDF5;
-  --tx:#0F1E2E;
-  --tx2:#4A6072;
-  --tx-inv:#F0F8FF;
-  --bd:rgba(14,116,144,0.15);
-  --bd2:rgba(14,116,144,0.30);
+  --grad-start:#18233A;
+  --grad-mid:#23324A;
+  --grad-end:#3A4D6B;
+  --grad-accent:#B8975A;
+  --gold:#B8975A;
+  --gold-lt:#D9C493;
+  --mist:#C7C9C2;
+  --ink:#23324A;
+  --bg:#E8E9E4;
+  --bg-card:#FBFBF8;
+  --bg2:#F0F0EB;
+  --bg3:#E2E3DD;
+  --tx:#1E2A3D;
+  --tx2:#646A72;
+  --tx-inv:#F4F2EC;
+  --bd:rgba(35,50,74,0.12);
+  --bd2:rgba(35,50,74,0.24);
   --r:10px;--rl:16px;
-  --shadow:0 2px 12px rgba(14,116,144,0.10);
-  --shadow-md:0 4px 24px rgba(14,116,144,0.15);
+  --shadow:0 2px 12px rgba(35,50,74,0.08);
+  --shadow-md:0 6px 28px rgba(35,50,74,0.16);
   --font:'Segoe UI',system-ui,-apple-system,sans-serif
 }
 @media(prefers-color-scheme:dark){
   :root{
-    --bg:#0B1623;--bg-card:#111E2E;--bg2:#152030;--bg3:#1C2B3D;
-    --tx:#D8EAF5;--tx2:#7BA5C0;
-    --bd:rgba(6,182,212,0.15);--bd2:rgba(6,182,212,0.28);
+    --bg:#121A26;--bg-card:#1A2433;--bg2:#202B3C;--bg3:#283447;
+    --tx:#E4E5E0;--tx2:#A3A8AE;--grad-end:#7F93B5;--ink:#C9D2E3;
+    --bd:rgba(199,201,194,0.12);--bd2:rgba(199,201,194,0.22);
     --shadow:0 2px 12px rgba(0,0,0,0.4);--shadow-md:0 4px 24px rgba(0,0,0,0.5)
   }
 }
-body{font-family:var(--font);background:var(--bg);color:var(--tx);font-size:14px;line-height:1.6;min-height:100vh}
+body{font-family:var(--font);background:linear-gradient(180deg,var(--bg) 0%,var(--bg3) 100%) fixed;color:var(--tx);font-size:14px;line-height:1.6;min-height:100vh}
 
 /* ── Page ── */
 .page{max-width:1280px;margin:0 auto;padding:0 0 3rem}
 
 /* ── Header gradient bar ── */
 .header-bar{
-  background:linear-gradient(120deg,var(--grad-start) 0%,var(--grad-mid) 50%,var(--grad-end) 100%);
+  position:relative;
+  background:
+    radial-gradient(ellipse 55% 140% at 88% 0%,rgba(199,201,194,0.16) 0%,transparent 60%),
+    linear-gradient(120deg,var(--grad-start) 0%,var(--grad-mid) 55%,#2E3F5C 100%);
   padding:1.4rem 2rem 1.2rem;
   display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;
-  box-shadow:0 4px 20px rgba(14,116,144,0.25);
+  box-shadow:0 6px 24px rgba(24,35,58,0.28);
   margin-bottom:0;
+  border-radius:0 0 var(--rl) var(--rl);overflow:hidden;
+}
+.header-bar::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--gold-lt) 25%,var(--gold) 60%,transparent);
 }
 .header-bar h1{
-  font-size:19px;font-weight:600;color:#fff;letter-spacing:0.3px;
+  font-size:19px;font-weight:600;color:#F4F2EC;letter-spacing:0.12em;
   display:flex;align-items:center;gap:10px;
 }
-.header-bar h1::before{content:'🏥';font-size:18px}
+.header-bar h1::before{content:'';width:28px;height:28px;flex-shrink:0;border-radius:8px;border:1px solid rgba(217,196,147,0.55);background:rgba(255,255,255,0.05) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 3.5h6v5.5h5.5v6H15v5.5H9V15H3.5V9H9z' fill='none' stroke='%23D9C493' stroke-width='1.6' stroke-linejoin='round'/%3E%3C/svg%3E") center/15px no-repeat}
 .hbadges{display:flex;gap:6px;flex-wrap:wrap}
 .badge{font-size:11px;padding:3px 11px;border-radius:99px;font-weight:600;border:1px solid rgba(255,255,255,0.3);color:#fff;backdrop-filter:blur(4px)}
 .bc{background:rgba(239,68,68,0.35)}.bh{background:rgba(245,158,11,0.35)}.bo{background:rgba(34,197,94,0.30)}
@@ -66,8 +78,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);font-size:14px
   position:relative;overflow:hidden;
 }
 .sc::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:3px;
-  background:linear-gradient(90deg,var(--grad-end),var(--grad-accent));
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--gold),var(--gold-lt) 55%,transparent);
 }
 .sc .n{font-size:24px;font-weight:700;margin-top:4px}
 .sc .l{font-size:11px;color:var(--tx2);margin-top:2px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px}
@@ -81,20 +93,20 @@ body{font-family:var(--font);background:var(--bg);color:var(--tx);font-size:14px
 }
 .tab:hover:not(.active){color:var(--grad-end);background:var(--bg2)}
 .tab.active{
-  color:var(--grad-end);border-bottom-color:var(--grad-end);
+  color:var(--ink);border-bottom-color:var(--gold);
   font-weight:600;background:var(--bg-card);
-  box-shadow:0 -2px 8px rgba(14,116,144,0.08);
+  box-shadow:0 -2px 8px rgba(35,50,74,0.06);
 }
 
 /* ── Search / Action row ── */
 .srow{display:flex;gap:8px;margin-bottom:1.1rem;align-items:center;flex-wrap:wrap}
-.srow input{flex:1;min-width:180px;font-size:13px;border:1px solid var(--bd2);border-radius:var(--r);height:36px;background:var(--bg-card);box-shadow:0 1px 4px rgba(14,116,144,0.07)}
+.srow input{flex:1;min-width:180px;font-size:13px;border:1px solid var(--bd2);border-radius:var(--r);height:36px;background:var(--bg-card);box-shadow:0 1px 4px rgba(35,50,74,0.07)}
 .srow select{width:145px;font-size:13px;border:1px solid var(--bd2);border-radius:var(--r);height:36px;background:var(--bg-card)}
 .add-btn{
   height:36px;padding:0 18px;font-size:13px;font-weight:600;
   background:linear-gradient(90deg,var(--grad-mid),var(--grad-end)) !important;
   color:#fff !important;border:none;border-radius:var(--r);cursor:pointer;white-space:nowrap;
-  box-shadow:0 2px 8px rgba(14,116,144,0.30);transition:opacity 0.15s;
+  box-shadow:0 2px 8px rgba(35,50,74,0.30);transition:opacity 0.15s;
 }
 .add-btn:hover{opacity:.88}
 
@@ -104,7 +116,7 @@ input,select,textarea,button{
   background:var(--bg-card);border:1px solid var(--bd2);
   border-radius:var(--r);padding:0 10px;height:34px;outline:none;
 }
-input:focus,select:focus,textarea:focus{border-color:var(--grad-end);box-shadow:0 0 0 2px rgba(14,116,144,0.12)}
+input:focus,select:focus,textarea:focus{border-color:var(--grad-end);box-shadow:0 0 0 2px rgba(35,50,74,0.12)}
 textarea{height:auto;padding:7px 10px}
 button{cursor:pointer;background:none}
 button:hover{background:var(--bg2)}
@@ -115,7 +127,7 @@ button:hover{background:var(--bg2)}
 .ptbl td{padding:9px 11px;border-bottom:1px solid var(--bd);vertical-align:middle}
 .ptbl tr:last-child td{border-bottom:none}
 .ptbl tbody tr{transition:background 0.1s}
-.ptbl tbody tr:hover td{background:linear-gradient(90deg,rgba(14,116,144,0.04),rgba(6,182,212,0.04))}
+.ptbl tbody tr:hover td{background:linear-gradient(90deg,rgba(35,50,74,0.04),rgba(184,151,90,0.04))}
 
 /* ── Priority tags ── */
 .ptag{font-size:11px;padding:2px 9px;border-radius:99px;font-weight:600;white-space:nowrap;display:inline-block;letter-spacing:0.2px}
@@ -127,7 +139,7 @@ button:hover{background:var(--bg2)}
 
 /* ── Dots ── */
 .dot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:5px;vertical-align:middle;box-shadow:0 0 0 2px rgba(255,255,255,0.8)}
-.dr{background:#EF4444}.da{background:#F59E0B}.dg{background:#10B981}
+.dr{background:#EF4444}.da{background:#F59E0B}.dg{background:#10B981}.dn{background:#CBD5E1}
 
 /* ── Action buttons ── */
 .acbtn{font-size:11px;padding:3px 10px;border-radius:var(--r);border:1px solid var(--bd2);background:none;cursor:pointer;color:var(--tx);height:auto;margin-right:3px;transition:all 0.1s}
@@ -137,11 +149,11 @@ button:hover{background:var(--bg2)}
 
 /* ── Back button ── */
 .back-btn{font-size:13px;color:var(--grad-end);background:none;border:none;cursor:pointer;margin-bottom:1.1rem;display:inline-flex;align-items:center;gap:5px;padding:0;height:auto;font-weight:500}
-.back-btn:hover{color:var(--grad-mid);background:none}
+.back-btn:hover{color:var(--ink);background:none}
 
 /* ── Detail cards ── */
 .dcard{background:var(--bg-card);border:1px solid var(--bd);border-radius:var(--rl);padding:1.2rem;margin-bottom:1rem;box-shadow:var(--shadow)}
-.dcard h3{font-size:13.5px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--grad-mid)}
+.dcard h3{font-size:13.5px;font-weight:600;margin-bottom:10px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;color:var(--ink)}
 .dgrid{display:grid;grid-template-columns:1fr 1fr;gap:13px}
 .di .lb{font-size:11px;color:var(--tx2);margin-bottom:2px;font-weight:500;text-transform:uppercase;letter-spacing:0.4px}
 .di .vl{font-size:13px;font-weight:500}
@@ -196,7 +208,7 @@ button:hover{background:var(--bg2)}
 .extra-section textarea{width:100%;min-height:60px;font-size:12.5px;resize:vertical;border:1px solid var(--bd2);background:var(--bg2)}
 
 /* ── Confirm dialog ── */
-.confirm-backdrop{position:fixed;inset:0;background:rgba(15,30,46,0.5);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:100;padding:1rem}
+.confirm-backdrop{position:fixed;inset:0;background:rgba(24,35,58,0.45);backdrop-filter:blur(4px);display:flex;align-items:center;justify-content:center;z-index:100;padding:1rem}
 .confirm-box{background:var(--bg-card);border:1px solid var(--bd);border-radius:var(--rl);padding:1.5rem;width:100%;max-width:320px;box-shadow:var(--shadow-md)}
 .confirm-box h4{font-size:15px;font-weight:600;margin-bottom:6px;color:var(--tx)}
 .confirm-box p{font-size:13px;color:var(--tx2);margin-bottom:1.1rem;line-height:1.6}
@@ -207,9 +219,9 @@ button:hover{background:var(--bg2)}
 .cbtn-del:hover{opacity:.9}
 
 /* ── Modal ── */
-.modal-bd{position:fixed;inset:0;background:rgba(15,30,46,0.5);backdrop-filter:blur(4px);display:flex;align-items:flex-start;justify-content:center;padding:1.5rem 1rem;z-index:50;overflow-y:auto}
+.modal-bd{position:fixed;inset:0;background:rgba(24,35,58,0.45);backdrop-filter:blur(4px);display:flex;align-items:flex-start;justify-content:center;padding:1.5rem 1rem;z-index:50;overflow-y:auto}
 .modal{background:var(--bg-card);border-radius:var(--rl);border:1px solid var(--bd);padding:1.5rem;width:100%;max-width:640px;box-shadow:var(--shadow-md)}
-.modal h2{font-size:16px;font-weight:600;margin-bottom:1.1rem;color:var(--grad-mid);display:flex;align-items:center;gap:7px}
+.modal h2{font-size:16px;font-weight:600;margin-bottom:1.1rem;color:var(--ink);display:flex;align-items:center;gap:7px}
 .modal h2::before{content:'＋';width:24px;height:24px;background:linear-gradient(135deg,var(--grad-mid),var(--grad-end));color:#fff;border-radius:6px;display:inline-flex;align-items:center;justify-content:center;font-size:13px;font-weight:700}
 .fgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem}
 .fg{display:flex;flex-direction:column;gap:4px}
@@ -220,7 +232,7 @@ button:hover{background:var(--bg2)}
 .mbtns{display:flex;gap:8px;justify-content:flex-end}
 .mbtns button{height:34px;padding:0 16px;font-size:13px;border-radius:var(--r);cursor:pointer;font-weight:500}
 .mbcancel{border:1px solid var(--bd2);background:none;color:var(--tx)}
-.mbsave{background:linear-gradient(90deg,var(--grad-mid),var(--grad-end)) !important;color:#fff !important;border:none;box-shadow:0 2px 8px rgba(14,116,144,0.3)}
+.mbsave{background:linear-gradient(90deg,var(--grad-mid),var(--grad-end)) !important;color:#fff !important;border:none;box-shadow:0 2px 8px rgba(35,50,74,0.3)}
 .modal-med-tbl{width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:6px}
 .modal-med-tbl th{text-align:left;padding:5px 7px;font-size:10.5px;color:var(--tx2);font-weight:600;border-bottom:1px solid var(--bd);text-transform:uppercase;letter-spacing:0.4px}
 .modal-med-tbl td{padding:4px 3px;border-bottom:1px solid var(--bd);vertical-align:middle}
@@ -243,108 +255,64 @@ button:hover{background:var(--bg2)}
 
 /* ══ Login Screen ══ */
 .login-screen{
-  position:fixed;inset:0;
-  display:flex;align-items:center;justify-content:center;z-index:999;padding:1rem;
-  /* iOS-style layered background */
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;z-index:999;padding:1rem;overflow:hidden;
   background:
-    radial-gradient(ellipse 80% 60% at 20% 10%,  rgba(180,215,235,0.85) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 70% at 80% 80%,  rgba(150,195,225,0.75) 0%, transparent 55%),
-    radial-gradient(ellipse 60% 50% at 60% 20%,  rgba(200,228,242,0.60) 0%, transparent 50%),
-    radial-gradient(ellipse 90% 80% at 10% 90%,  rgba(165,205,228,0.55) 0%, transparent 60%),
-    linear-gradient(160deg, #C8DFF0 0%, #B5D0E8 30%, #A8C8E2 60%, #BDD6EC 100%);
+    radial-gradient(ellipse 75% 65% at 0% 0%, rgba(24,35,58,0.95) 0%, rgba(35,50,74,0.6) 38%, transparent 68%),
+    radial-gradient(ellipse 60% 55% at 100% 100%, rgba(255,255,255,0.7) 0%, transparent 62%),
+    radial-gradient(ellipse 55% 45% at 88% 12%, rgba(255,255,255,0.32) 0%, transparent 60%),
+    linear-gradient(135deg,#23324A 0%,#3B4A62 26%,#7E858C 48%,#B4B7B1 64%,#C7C9C2 80%,#DEDFDA 100%);
 }
-/* floating blur orbs — pure CSS, no images */
+/* 香檳金細線：呼應圖中的金箔交界 */
 .login-screen::before{
-  content:'';position:absolute;inset:0;pointer-events:none;
+  content:'';position:absolute;inset:-25%;pointer-events:none;
   background:
-    radial-gradient(circle 320px at 15% 25%,  rgba(255,255,255,0.28) 0%, transparent 70%),
-    radial-gradient(circle 250px at 85% 70%,  rgba(255,255,255,0.22) 0%, transparent 70%),
-    radial-gradient(circle 180px at 70% 15%,  rgba(255,255,255,0.18) 0%, transparent 70%),
-    radial-gradient(circle 200px at 30% 80%,  rgba(255,255,255,0.15) 0%, transparent 70%);
-  filter:blur(32px);
+    linear-gradient(128deg,transparent 47.7%,rgba(217,196,147,0.65) 48%,transparent 48.35%),
+    linear-gradient(128deg,transparent 50.9%,rgba(217,196,147,0.28) 51.1%,transparent 51.35%);
 }
+/* 霧化光暈 */
 .login-screen::after{
   content:'';position:absolute;inset:0;pointer-events:none;
-  /* subtle grid lines for depth */
-  background-image:
-    linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
-  background-size:48px 48px;
+  background:
+    radial-gradient(circle 360px at 72% 78%,rgba(255,255,255,0.40),transparent 70%),
+    radial-gradient(circle 300px at 18% 22%,rgba(110,130,165,0.28),transparent 70%);
+  filter:blur(34px);
 }
 .login-box{
   position:relative;z-index:1;
-  /* iOS frosted glass */
-  background:rgba(235,247,255,0.55);
-  backdrop-filter:blur(40px) saturate(180%);
-  -webkit-backdrop-filter:blur(40px) saturate(180%);
-  border:1px solid rgba(255,255,255,0.70);
-  border-radius:24px;padding:2.6rem 2.2rem;
-  width:100%;max-width:360px;
-  box-shadow:
-    0 2px 0 rgba(255,255,255,0.8) inset,    /* top highlight */
-    0 -1px 0 rgba(180,210,235,0.4) inset,    /* bottom inner shadow */
-    0 20px 60px rgba(80,130,175,0.22),
-    0 4px 16px rgba(80,130,175,0.12);
+  background:rgba(246,246,242,0.58);
+  backdrop-filter:blur(38px) saturate(140%);
+  -webkit-backdrop-filter:blur(38px) saturate(140%);
+  border:1px solid rgba(255,255,255,0.62);
+  border-radius:24px;padding:2.6rem 2.2rem;width:100%;max-width:360px;
+  box-shadow:0 2px 0 rgba(255,255,255,0.75) inset,0 26px 64px rgba(24,35,58,0.32),0 4px 16px rgba(24,35,58,0.14);
   text-align:center;
 }
-/* inner top shine strip */
 .login-box::before{
-  content:'';position:absolute;top:0;left:10%;right:10%;height:1px;
-  background:linear-gradient(90deg,transparent,rgba(255,255,255,0.9),transparent);
-  border-radius:99px;
+  content:'';position:absolute;top:0;left:12%;right:12%;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(217,196,147,0.95),transparent);
 }
-.login-logo{font-size:38px;margin-bottom:0.4rem;filter:drop-shadow(0 2px 6px rgba(80,140,190,0.25))}
-.login-title{
-  font-size:20px;font-weight:700;
-  color:#1E4D6B;
-  margin-bottom:4px;letter-spacing:0.3px;
-  text-shadow:0 1px 2px rgba(255,255,255,0.7);
-}
-.login-sub{font-size:12px;color:#5C90A8;margin-bottom:2rem;letter-spacing:0.2px}
+.login-logo{width:52px;height:52px;margin:0 auto 1rem;border-radius:15px;display:flex;align-items:center;justify-content:center;background:linear-gradient(145deg,#34486A 0%,#23324A 55%,#1A2638 100%);border:1px solid rgba(217,196,147,0.45);box-shadow:0 1px 0 rgba(255,255,255,0.12) inset,0 8px 20px rgba(24,35,58,0.30)}
+.login-title{font-size:20px;font-weight:600;color:#23324A;margin-bottom:6px;letter-spacing:0.14em}
+.login-sub{font-size:12px;color:#646A72;margin-bottom:2rem;letter-spacing:0.08em}
 .login-form{display:flex;flex-direction:column;gap:13px;text-align:left}
-.login-form label{
-  font-size:10.5px;color:#4A7E96;font-weight:700;
-  text-transform:uppercase;letter-spacing:0.6px;margin-bottom:2px;display:block;
-}
+.login-form label{font-size:10.5px;color:#3A4D6B;font-weight:700;letter-spacing:0.12em;margin-bottom:2px;display:block}
 .login-form input{
-  height:42px;border-radius:12px;
-  border:1px solid rgba(160,205,230,0.60);
-  background:rgba(255,255,255,0.55);
-  backdrop-filter:blur(8px);
-  -webkit-backdrop-filter:blur(8px);
-  color:#1E4D6B;padding:0 14px;font-size:13.5px;width:100%;
-  box-shadow:0 1px 3px rgba(80,130,175,0.08),0 1px 0 rgba(255,255,255,0.6) inset;
-  transition:all 0.18s;
+  height:42px;border-radius:12px;border:1px solid rgba(35,50,74,0.18);
+  background:rgba(255,255,255,0.62);color:#1E2A3D;padding:0 14px;font-size:13.5px;width:100%;
+  box-shadow:0 1px 3px rgba(24,35,58,0.06),0 1px 0 rgba(255,255,255,0.7) inset;transition:all 0.18s;
 }
-.login-form input::placeholder{color:rgba(90,140,168,0.55)}
-.login-form input:focus{
-  outline:none;
-  border-color:rgba(80,160,200,0.70);
-  background:rgba(255,255,255,0.72);
-  box-shadow:0 0 0 3px rgba(100,175,215,0.18),0 1px 0 rgba(255,255,255,0.7) inset;
-}
+.login-form input::placeholder{color:rgba(100,106,114,0.6)}
+.login-form input:focus{outline:none;border-color:rgba(184,151,90,0.75);background:rgba(255,255,255,0.8);box-shadow:0 0 0 3px rgba(184,151,90,0.18)}
 .login-btn{
-  height:44px;border-radius:12px;border:none;
-  background:linear-gradient(180deg,#5AADC8 0%,#3A8FAA 50%,#2E7E9A 100%);
-  color:#fff;font-size:14px;font-weight:700;cursor:pointer;margin-top:8px;
-  letter-spacing:0.5px;
-  box-shadow:
-    0 1px 0 rgba(255,255,255,0.3) inset,
-    0 6px 20px rgba(50,130,170,0.40),
-    0 2px 6px rgba(50,130,170,0.25);
-  transition:all 0.15s;
+  height:44px;border-radius:12px;border:1px solid rgba(217,196,147,0.35);
+  background:linear-gradient(180deg,#34486A 0%,#23324A 55%,#1A2638 100%);
+  color:#F4F2EC;font-size:14px;font-weight:600;cursor:pointer;margin-top:8px;letter-spacing:0.3em;
+  box-shadow:0 1px 0 rgba(255,255,255,0.14) inset,0 8px 22px rgba(24,35,58,0.38);transition:all 0.15s;
 }
-.login-btn:hover{
-  background:linear-gradient(180deg,#62B8D4 0%,#4298B4 50%,#3388A8 100%);
-  box-shadow:0 1px 0 rgba(255,255,255,0.3) inset,0 8px 24px rgba(50,130,170,0.50),0 2px 8px rgba(50,130,170,0.30);
-  transform:translateY(-1px);
-}
-.login-btn:active{transform:translateY(0);opacity:.92}
-.login-err{font-size:12px;color:#C0504A;text-align:center;min-height:18px;margin-top:-4px;font-weight:500}
-.login-hint{
-  font-size:11px;color:rgba(80,130,160,0.70);
-  text-align:center;margin-top:1.1rem;letter-spacing:0.2px;
-}
+.login-btn:hover{transform:translateY(-1px);box-shadow:0 1px 0 rgba(255,255,255,0.14) inset,0 10px 26px rgba(24,35,58,0.45)}
+.login-btn:active{transform:translateY(0);opacity:.94}
+.login-err{font-size:12px;color:#A63A3A;text-align:center;min-height:18px;margin-top:-4px;font-weight:500}
+.login-hint{font-size:11px;color:rgba(70,80,95,0.72);text-align:center;margin-top:1.1rem;letter-spacing:0.06em}
 
 /* ══ User bar (top right in header) ══ */
 .user-bar{display:flex;align-items:center;gap:10px}
@@ -355,9 +323,9 @@ button:hover{background:var(--bg2)}
 }
 .user-avatar{
   width:22px;height:22px;border-radius:50%;
-  background:linear-gradient(135deg,#06B6D4,#0E7490);
+  background:linear-gradient(135deg,var(--gold-lt),var(--gold));
   display:inline-flex;align-items:center;justify-content:center;
-  font-size:11px;font-weight:700;color:#fff;flex-shrink:0;
+  font-size:11px;font-weight:700;color:#1E2A3D;flex-shrink:0;
 }
 .logout-btn{
   height:28px;padding:0 11px;font-size:11px;font-weight:600;border-radius:99px;
@@ -367,7 +335,7 @@ button:hover{background:var(--bg2)}
 
 /* ══ Admin panel ══ */
 .admin-panel{background:var(--bg-card);border:1px solid var(--bd);border-radius:var(--rl);padding:1.4rem;margin-bottom:1.2rem;box-shadow:var(--shadow)}
-.admin-panel h3{font-size:14px;font-weight:600;color:var(--grad-mid);margin-bottom:1rem;display:flex;align-items:center;gap:7px}
+.admin-panel h3{font-size:14px;font-weight:600;color:var(--ink);margin-bottom:1rem;display:flex;align-items:center;gap:7px}
 .user-table{width:100%;border-collapse:collapse;font-size:13px}
 .user-table th{text-align:left;padding:7px 10px;font-size:11px;color:var(--tx2);font-weight:600;border-bottom:1px solid var(--bd);background:var(--bg2);text-transform:uppercase;letter-spacing:0.4px}
 .user-table td{padding:8px 10px;border-bottom:1px solid var(--bd);vertical-align:middle}
@@ -408,15 +376,15 @@ button:hover{background:var(--bg2)}
   display:inline-flex;align-items:center;gap:5px;
 }
 .ward-tab:hover{
-  background:linear-gradient(135deg,rgba(14,116,144,0.10),rgba(6,182,212,0.10));
+  background:linear-gradient(135deg,rgba(35,50,74,0.10),rgba(184,151,90,0.10));
   color:var(--grad-end);
   transform:translateY(-1px);
-  box-shadow:0 3px 10px rgba(14,116,144,0.15);
+  box-shadow:0 3px 10px rgba(35,50,74,0.15);
 }
 .ward-tab.active{
   background:linear-gradient(135deg,var(--grad-mid) 0%,var(--grad-end) 100%);
   color:#fff;
-  box-shadow:0 4px 14px rgba(14,116,144,0.35),0 1px 0 rgba(255,255,255,0.2) inset;
+  box-shadow:0 4px 14px rgba(35,50,74,0.35),0 1px 0 rgba(255,255,255,0.2) inset;
   transform:translateY(-1px);
 }
 .ward-count{
@@ -426,11 +394,11 @@ button:hover{background:var(--bg2)}
   line-height:1.4;
 }
 .ward-tab.active .ward-count{
-  background:rgba(255,255,255,0.25);color:#fff;
+  background:rgba(217,196,147,0.32);color:#F3E8CC;
 }
 .ward-tab:not(.active) .ward-count{
-  background:rgba(14,116,144,0.12);
-  color:var(--grad-end);
+  background:rgba(184,151,90,0.16);
+  color:#8A6D35;
 }
 
 /* ══ Edit mode ══ */
@@ -443,7 +411,7 @@ button:hover{background:var(--bg2)}
 .save-btn{
   height:34px;padding:0 16px;font-size:13px;font-weight:600;border-radius:var(--r);
   border:none;background:linear-gradient(90deg,var(--grad-mid),var(--grad-end));
-  color:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(14,116,144,0.3);
+  color:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(35,50,74,0.3);
   display:inline-flex;align-items:center;gap:6px;
 }
 .save-btn:hover{opacity:.88}
@@ -453,9 +421,9 @@ button:hover{background:var(--bg2)}
 }
 .cancel-edit-btn:hover{background:var(--bg2)}
 .edit-mode-banner{
-  background:linear-gradient(90deg,rgba(14,116,144,0.08),rgba(6,182,212,0.06));
-  border:1px solid rgba(14,116,144,0.25);border-radius:var(--r);
-  padding:8px 14px;margin-bottom:1rem;font-size:12.5px;color:var(--grad-mid);
+  background:linear-gradient(90deg,rgba(35,50,74,0.08),rgba(184,151,90,0.06));
+  border:1px solid rgba(35,50,74,0.25);border-radius:var(--r);
+  padding:8px 14px;margin-bottom:1rem;font-size:12.5px;color:var(--ink);
   display:flex;align-items:center;gap:8px;font-weight:500;
 }
 .edit-field{
@@ -463,17 +431,63 @@ button:hover{background:var(--bg2)}
   border:1px solid var(--bd2);background:var(--bg-card);
   padding:0 10px;color:var(--tx);
 }
-.edit-field:focus{outline:none;border-color:var(--grad-end);box-shadow:0 0 0 2px rgba(14,116,144,0.12)}
+.edit-field:focus{outline:none;border-color:var(--grad-end);box-shadow:0 0 0 2px rgba(35,50,74,0.12)}
 .edit-field-sm{width:90px;font-size:13px;height:32px;border-radius:var(--r);
   border:1px solid var(--bd2);background:var(--bg-card);padding:0 8px;color:var(--tx);}
 .edit-field-sm:focus{outline:none;border-color:var(--grad-end)}
+
+/* ══ Handoff export ══ */
+.ho-btn{height:36px;padding:0 16px;font-size:13px;font-weight:600;border-radius:var(--r);
+  border:1.5px solid var(--grad-mid);background:var(--bg-card);color:var(--ink);cursor:pointer;white-space:nowrap;transition:all .15s}
+.ho-btn:hover{background:var(--grad-mid);color:#F4F2EC}
+.ho-modal{max-width:920px !important}
+.ho-modal h2::before{content:'' !important;background:linear-gradient(135deg,var(--grad-mid),var(--grad-end)) center/16px no-repeat,linear-gradient(135deg,var(--grad-mid),var(--grad-end)) !important;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23F4F2EC' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M9 4h6v3H9z'/%3E%3Cpath d='M15 5.5h2.5v14.5h-11V5.5H9'/%3E%3Cpath d='M9 11h6M9 14.5h6M9 18h3.5'/%3E%3C/svg%3E"),linear-gradient(135deg,var(--grad-mid),var(--grad-end)) !important;background-size:15px,100% !important;background-position:center !important;background-repeat:no-repeat !important}
+.ho-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:10px}
+.ho-controls select{height:32px;font-size:12.5px}
+.ho-link{font-size:12px;color:var(--ink);background:none;border:none;cursor:pointer;height:auto;padding:2px 4px;text-decoration:underline}
+.ho-picks{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px;max-height:110px;overflow:auto;padding:2px}
+.ho-pick{display:inline-flex;align-items:center;gap:5px;font-size:12px;padding:4px 10px;border-radius:99px;
+  border:1px solid var(--bd2);background:var(--bg2);cursor:pointer;user-select:none}
+.ho-pick input{height:auto;width:auto;margin:0}
+.ho-preview{max-height:52vh;overflow:auto;border:1px solid var(--bd);border-radius:var(--r);background:#E9EAE5;padding:14px}
+.ho-actions{display:flex;gap:8px;justify-content:flex-end;align-items:center;margin-top:12px;flex-wrap:wrap}
+.ho-msg{font-size:12px;color:#3B6D11;margin-right:auto}
+.ho-fallback{width:100%;min-height:140px;font-size:12px;margin-top:10px}
+/* 交班單本體（預覽與列印共用，固定白紙配色） */
+.ho-sheet{background:#fff;color:#1E2A3D;font-size:12.5px;line-height:1.55;padding:18px 20px;border-radius:6px;
+  -webkit-print-color-adjust:exact;print-color-adjust:exact}
+.ho-head{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap;
+  border-bottom:2px solid #23324A;padding-bottom:8px;margin-bottom:12px}
+.ho-title{font-size:17px;font-weight:700;color:#23324A;letter-spacing:.1em}
+.ho-meta{font-size:11.5px;color:#646A72}
+.ho-card{border:1px solid #D5D7D0;border-left:4px solid #23324A;border-radius:6px;padding:10px 12px;margin-bottom:10px;break-inside:avoid;page-break-inside:avoid}
+.ho-card.pri-Critical{border-left-color:#B91C1C}.ho-card.pri-High{border-left-color:#B7791F}
+.ho-card-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:6px}
+.ho-bed{font-size:15px;font-weight:700;color:#1E2A3D}
+.ho-id{font-size:11.5px;color:#646A72}
+.ho-tag{font-size:10.5px;font-weight:600;padding:1px 8px;border-radius:99px;border:1px solid}
+.ho-row{display:flex;gap:8px;padding:2px 0}
+.ho-lb{flex:0 0 72px;color:#646A72;font-size:11.5px;padding-top:1px}
+.ho-val{flex:1;white-space:pre-wrap;word-break:break-word}
+.ho-meds{margin:0;padding-left:16px}
+.ho-meds li{margin:1px 0}
+.ho-abx{color:#8A6D35;font-size:11.5px}
+.ho-empty{text-align:center;color:#646A72;padding:30px}
+#printroot{display:none}
+@media print{
+  @page{size:A4;margin:12mm}
+  body{background:#fff !important}
+  body > *:not(#printroot){display:none !important}
+  #printroot{display:block !important}
+  #printroot .ho-sheet{padding:0;border-radius:0}
+}
 </style>
 </head>
 <body>
 
 <div id="login-screen" class="login-screen">
   <div class="login-box">
-    <div class="login-logo">🏥</div>
+    <div class="login-logo"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M9 3.5h6v5.5h5.5v6H15v5.5H9V15H3.5V9H9z" fill="none" stroke="#D9C493" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
     <div class="login-title">病房藥師追蹤平台</div>
     <div class="login-sub">請輸入帳號與密碼登入</div>
     <div class="login-form">
@@ -498,7 +512,6 @@ button:hover{background:var(--bg2)}
   <div class="tabs">
     <button class="tab active" onclick="switchTab('patients')">病患總覽</button>
     <button class="tab" onclick="switchTab('alerts')">待處理警示</button>
-    <button class="tab" onclick="switchTab('renal')">腎功能</button>
     <button class="tab" onclick="switchTab('labs')">抽血時間</button>
     <button class="tab" onclick="switchTab('abxwatch')">抗生素監測</button>
   </div>
@@ -507,6 +520,7 @@ button:hover{background:var(--bg2)}
   <div id="confirmroot"></div>
 </div><!-- /content -->
 </div><!-- /page -->
+<div id="printroot"></div>
 <script>
 /* ══════════════════════════════════════════
    AUTH & STORAGE SYSTEM
@@ -522,8 +536,6 @@ button:hover{background:var(--bg2)}
    ─────────────────────────────────────────── */
 const USERS = [
   {username:'admin',   password:'admin1234',  displayName:'管理員',    role:'admin'},
-  {username:'pharm01', password:'ward0101',   displayName:'藥師 01',   role:'user'},
-  {username:'pharm02', password:'ward0202',   displayName:'藥師 02',   role:'user'},
   {username:'Y05490', password:'tmh@83Jan10',   displayName:'Y05490 蔡孟夏',   role:'user'},
 ];
 
@@ -542,6 +554,14 @@ function loadData(){
       const saved = JSON.parse(raw);
       pts.length = 0;
       saved.forEach(p => pts.push(p));
+      // 舊版 Free Note 併入藥師備註（避免資料遺失）
+      let migrated = false;
+      pts.forEach(p => {
+        if(p.freeNote){ p.notes = [p.notes, p.freeNote].filter(Boolean).join('\n'); migrated = true; }
+        if('freeNote' in p){ delete p.freeNote; migrated = true; }
+        if(p.ward==='NI'){ p.ward='NICU'; migrated = true; }
+      });
+      if(migrated) saveData();
     }
   } catch(e){ console.warn('localStorage load failed', e); }
 }
@@ -621,6 +641,8 @@ function getGenericNames(n){
 }
 /* ══ KDIGO 2024 ══ */
 function kdigoStage(e){
+  if(e===null||e===undefined||e===''||isNaN(parseFloat(e)))return{g:'—',label:'未填',color:'#94A3B8'};
+  e=parseFloat(e);
   if(e>=90)return{g:'G1',label:'正常或偏高',color:'#1D9E75'};
   if(e>=60)return{g:'G2',label:'輕度下降',color:'#639922'};
   if(e>=45)return{g:'G3a',label:'輕中度下降',color:'#EF9F27'};
@@ -628,13 +650,8 @@ function kdigoStage(e){
   if(e>=15)return{g:'G4',label:'重度下降',color:'#E24B4A'};
   return{g:'G5',label:'腎衰竭(ESRD)',color:'#A32D2D'};
 }
-function calcCCr(age,weight,sCr,sex){
-  const a=parseFloat(age),w=parseFloat(weight),cr=parseFloat(sCr);
-  if(!a||!w||!cr||cr<=0)return null;
-  let c=((140-a)*w)/(72*cr);
-  if((sex||'M').toUpperCase()==='F')c*=0.85;
-  return Math.round(c*10)/10;
-}
+function egfrNum(p){const v=parseFloat(p.egfr);return isNaN(v)?null:v;}
+function stageText(s){return s.g==='—'?'未填':`${s.g} — ${s.label}`;}
 function pClass(p){return{Critical:'pc',High:'ph',Medium:'pm',Low:'pl',Routine:'pr'}[p]||'pr';}
 function bedSort(a,b){return(a.bed||'').localeCompare(b.bed||'','zh-TW',{numeric:true});}
 
@@ -692,9 +709,9 @@ function resetSampleData(){
 function getAlerts(){
   const a=[];
   getWardPts().forEach(p=>{
-    const s=kdigoStage(p.egfr);
-    if(p.egfr<15)a.push({t:'d',pid:p.id,bed:p.bed,priority:p.priority,msg:`eGFR ${p.egfr} (KDIGO ${s.g} — ${s.label})，需緊急確認所有用藥`});
-    else if(p.egfr<30)a.push({t:'w',pid:p.id,bed:p.bed,priority:p.priority,msg:`eGFR ${p.egfr} (KDIGO ${s.g})，多種藥物需劑量調整`});
+    const s=kdigoStage(p.egfr),ev=egfrNum(p);
+    if(ev!==null&&ev<15)a.push({t:'d',pid:p.id,bed:p.bed,priority:p.priority,msg:`eGFR ${p.egfr} (KDIGO ${s.g} — ${s.label})，需緊急確認所有用藥`});
+    else if(ev!==null&&ev<30)a.push({t:'w',pid:p.id,bed:p.bed,priority:p.priority,msg:`eGFR ${p.egfr} (KDIGO ${s.g})，多種藥物需劑量調整`});
     p.meds.forEach(m=>{
       if(m.note&&m.note.includes('禁用'))a.push({t:'d',pid:p.id,bed:p.bed,priority:p.priority,msg:`${m.name} ${m.dose} — ${m.note}`});
       else if(m.note&&(m.note.includes('TDM')||m.note.includes('trough')))a.push({t:'w',pid:p.id,bed:p.bed,priority:p.priority,msg:`${m.name} — ${m.note}`});
@@ -713,12 +730,12 @@ let activeTab='patients',detailId=null,filterPriority='all',searchText='',pendin
 
 function switchTab(t){
   activeTab=t;detailId=null;
-  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['patients','alerts','renal','labs','abxwatch'][i]===t));
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('active',['patients','alerts','labs','abxwatch'][i]===t));
   render();
 }
 
 /* ══ Summary ══ */
-const WARDS=['全部','3A','3B','5A','5B','6A','6B','7A','7B'];
+const WARDS=['全部','2W','2A','2B','2C','3A','3B','5A','5B','6A','6B','7A','7B','NICU'];
 let activeWard='全部';
 
 function getWardPts(){
@@ -729,7 +746,7 @@ function renderSummary(){
   const tot=wp.length,
         crit=wp.filter(p=>p.priority==='Critical').length,
         high=wp.filter(p=>p.priority==='High').length,
-        lowE=wp.filter(p=>p.egfr<30).length;
+        lowE=wp.filter(p=>{const v=egfrNum(p);return v!==null&&v<30;}).length;
   document.getElementById('sumcards').innerHTML=`
     <div class="sc"><div class="n">${tot}</div><div class="l">${activeWard==='全部'?'總病患數':activeWard+' 病患數'}</div></div>
     <div class="sc"><div class="n" style="color:#A32D2D">${crit}</div><div class="l">Critical</div></div>
@@ -771,25 +788,25 @@ function renderPatients(){
         <option value="Medium" ${filterPriority==='Medium'?'selected':''}>Medium</option>
         <option value="Routine" ${filterPriority==='Routine'?'selected':''}>Routine</option>
       </select>
+      <button class="ho-btn" onclick="openHandoff()">交班匯出</button>
       <button class="add-btn" onclick="openModal()">＋ 新增病患</button>
     </div>
     <table class="ptbl">
       <thead><tr>
-        <th>床號</th><th>編號</th><th>年齡/性別</th><th>診斷</th><th>優先等級</th>
+        <th>床號</th><th>編號</th><th>診斷</th><th>優先等級</th>
         <th>sCr (mg/dL)</th><th>eGFR</th><th>CCr</th><th>KDIGO</th><th>藥物數</th><th>操作</th>
       </tr></thead>
       <tbody>
       ${list.map(p=>{
-        const s=kdigoStage(p.egfr),ccr=calcCCr(p.age,p.weight,p.creatinine,p.sex);
+        const s=kdigoStage(p.egfr),ev=egfrNum(p);
         return`<tr>
           <td style="font-weight:500">${p.bed||'—'}</td>
           <td style="font-weight:500;color:var(--tx2);font-size:12px">${p.id}</td>
-          <td>${p.age}歲 ${p.sex==='F'?'♀':'♂'}</td>
           <td style="font-size:12px;max-width:140px">${p.diag}</td>
           <td><span class="ptag ${pClass(p.priority)}">${p.priority}</span></td>
-          <td>${p.creatinine}<br><span style="font-size:11px;color:var(--tx2)">${p.sCr_date}</span></td>
-          <td><span class="dot ${p.egfr<15?'dr':p.egfr<30?'da':'dg'}"></span><strong>${p.egfr}</strong></td>
-          <td style="font-size:12px">${ccr!=null?ccr+' mL/min':'—'}</td>
+          <td>${(p.creatinine!==''&&p.creatinine!=null)?`${p.creatinine}<br><span style="font-size:11px;color:var(--tx2)">${p.sCr_date}</span>`:'—'}</td>
+          <td><span class="dot ${ev===null?'dn':ev<15?'dr':ev<30?'da':'dg'}"></span><strong>${ev===null?'—':p.egfr}</strong></td>
+          <td style="font-size:12px">${p.ccr?p.ccr+' mL/min':'—'}</td>
           <td><span class="ptag" style="background:${s.color}22;color:${s.color}">${s.g}</span></td>
           <td>${p.meds.length}</td>
           <td style="white-space:nowrap">
@@ -806,7 +823,7 @@ function renderPatients(){
 function renderDetail(pid){
   const p=pts.find(x=>x.id===pid);
   if(!p){detailId=null;editMode=false;renderPatients();return;}
-  const s=kdigoStage(p.egfr),pct=Math.min(100,(p.egfr/120)*100),ccr=calcCCr(p.age,p.weight,p.creatinine,p.sex);
+  const s=kdigoStage(p.egfr),ev=egfrNum(p),pct=ev===null?0:Math.min(100,(ev/120)*100);
   document.getElementById('viewroot').innerHTML=`
     <button class="back-btn" onclick="detailId=null;editMode=false;renderPatients()">← 返回病患列表</button>
     <div class="dcard">
@@ -816,8 +833,7 @@ function renderDetail(pid){
           : `<span class="ptag ${pClass(p.priority)}">${p.priority}</span>
              <span style="font-size:15px;font-weight:500">${p.bed||'—'}</span>
              <span style="color:var(--tx2);font-size:12px;font-weight:400">${p.id}</span>
-             ${p.ward?`<span class="ptag pm" style="font-size:11px">${p.ward} 病房</span>`:''}
-             <span style="font-size:13px;color:var(--tx2);font-weight:400">${p.age}歲・${p.sex==='F'?'女':'男'}・${p.weight}kg</span>`
+             ${p.ward?`<span class="ptag" style="font-size:11px;background:rgba(35,50,74,0.08);color:var(--ink);border:1px solid rgba(35,50,74,0.18)">${p.ward} 病房</span>`:''}`
         }
         <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
           ${editMode
@@ -835,7 +851,7 @@ function renderDetail(pid){
           <div class="fg"><label>病房</label>
             <select id="e-ward" class="edit-field">
               <option value="">選擇病房</option>
-              <option value="3A">3A</option><option value="3B">3B</option><option value="5A">5A</option><option value="5B">5B</option><option value="6A">6A</option><option value="6B">6B</option><option value="7A">7A</option><option value="7B">7B</option>
+              ${WARDS.slice(1).map(w=>`<option value="${w}" ${p.ward===w?'selected':''}>${w}</option>`).join('')}
             </select>
           </div>
           <div class="fg"><label>編號</label><input id="e-id" class="edit-field" value="${p.id}"/></div>
@@ -848,24 +864,17 @@ function renderDetail(pid){
               <option ${p.priority==='Routine'?'selected':''}>Routine</option>
             </select>
           </div>
-          <div class="fg"><label>年齡</label><input id="e-age" class="edit-field" type="number" value="${p.age}"/></div>
-          <div class="fg"><label>性別</label>
-            <select id="e-sex" class="edit-field">
-              <option value="M" ${p.sex==='M'?'selected':''}>男 (M)</option>
-              <option value="F" ${p.sex==='F'?'selected':''}>女 (F)</option>
-            </select>
-          </div>
-          <div class="fg"><label>體重 (kg)</label><input id="e-weight" class="edit-field" type="number" value="${p.weight}"/></div>
           <div class="fg full"><label>診斷</label><input id="e-diag" class="edit-field" value="${p.diag}"/></div>
           <div class="fg"><label>Creatinine (mg/dL)</label><input id="e-cr" class="edit-field" type="number" step="0.1" value="${p.creatinine}"/></div>
           <div class="fg"><label>eGFR (mL/min/1.73m²)</label><input id="e-egfr" class="edit-field" type="number" value="${p.egfr}"/></div>
+          <div class="fg"><label>CCr (mL/min)</label><input id="e-ccr" class="edit-field" type="number" step="0.1" value="${p.ccr||''}"/></div>
           <div class="fg full"><label>藥師備註</label><textarea id="e-notes" class="edit-field" style="height:70px;padding:7px 10px">${p.notes||''}</textarea></div>
         </div>
       ` : `
         <div class="dgrid">
           <div class="di"><div class="lb">診斷</div><div class="vl" style="font-weight:400;font-size:13px">${p.diag}</div></div>
           <div class="di"><div class="lb">最後介入</div><div class="vl">${p.lastIntv}</div></div>
-          <div class="di" style="grid-column:1/-1"><div class="lb">藥師備註</div><div class="vl" style="font-weight:400;font-size:12.5px">${p.notes}</div></div>
+          <div class="di" style="grid-column:1/-1"><div class="lb">藥師備註</div><div class="vl" style="font-weight:400;font-size:12.5px;white-space:pre-wrap">${p.notes||'—'}</div></div>
         </div>
       `}
     </div>
@@ -873,16 +882,16 @@ function renderDetail(pid){
       <div class="dcard" style="margin:0">
         <h3 style="font-size:13px;margin-bottom:9px">腎功能 — KDIGO 2024</h3>
         <div style="margin-bottom:8px">
-          <div style="font-size:11px;color:var(--tx2)">Creatinine <span style="float:right">${p.sCr_date}</span></div>
-          <div style="font-size:20px;font-weight:500">${p.creatinine}<span style="font-size:12px;font-weight:400;color:var(--tx2)"> mg/dL</span></div>
+          <div style="font-size:11px;color:var(--tx2)">Creatinine <span style="float:right">${(p.creatinine!==''&&p.creatinine!=null)?p.sCr_date:''}</span></div>
+          <div style="font-size:20px;font-weight:500">${(p.creatinine!==''&&p.creatinine!=null)?`${p.creatinine}<span style="font-size:12px;font-weight:400;color:var(--tx2)"> mg/dL</span>`:'—'}</div>
         </div>
         <div style="font-size:11px;color:var(--tx2);margin-bottom:2px">eGFR (CKD-EPI)</div>
-        <div style="font-size:20px;font-weight:500">${p.egfr}<span style="font-size:12px;font-weight:400"> mL/min/1.73m²</span></div>
+        <div style="font-size:20px;font-weight:500">${ev===null?'—':`${p.egfr}<span style="font-size:12px;font-weight:400"> mL/min/1.73m²</span>`}</div>
         <div class="egfr-bg"><div class="egfr-fill" style="width:${pct}%;background:${s.color}"></div></div>
         <div class="egfr-stages"><span>G5&lt;15</span><span>G4 15</span><span>G3b 30</span><span>G3a 45</span><span>G2 60</span><span>G1 90+</span></div>
-        <div style="margin-top:8px"><span class="ptag" style="background:${s.color}22;color:${s.color}">${s.g} — ${s.label}</span></div>
-        <div style="margin-top:9px;font-size:11px;color:var(--tx2)">CCr (Cockcroft-Gault)</div>
-        <div style="font-size:16px;font-weight:500;margin-top:2px">${ccr!=null?ccr+' mL/min':'資料不足'}</div>
+        <div style="margin-top:8px"><span class="ptag" style="background:${s.color}22;color:${s.color}">${stageText(s)}</span></div>
+        <div style="margin-top:9px;font-size:11px;color:var(--tx2)">CCr</div>
+        <div style="font-size:16px;font-weight:500;margin-top:2px">${p.ccr?p.ccr+' mL/min':'—'}</div>
       </div>
       <div class="dcard" style="margin:0">
         <h3 style="font-size:13px;margin-bottom:9px">電解質</h3>
@@ -900,7 +909,7 @@ function renderDetail(pid){
       <div class="extra-section"><textarea onchange="saveField('${p.id}','culture',this.value)">${p.culture||''}</textarea></div>
     </div>
     <div class="dcard">
-      <h3 style="font-size:13px;margin-bottom:9px">用藥清單</h3>
+      <h3 style="font-size:13px;margin-bottom:9px">藥物紀錄<span style="font-size:11px;font-weight:400;color:var(--tx2)">(抗生素審核、特殊藥物...)</span></h3>
       <table class="med-tbl">
         <thead><tr>
           <th style="width:27%">藥名</th><th style="width:14%">劑量</th>
@@ -998,13 +1007,14 @@ function saveDetail(pid){
   p.bed    = document.getElementById('e-bed').value||p.bed;
   p.ward   = document.getElementById('e-ward').value||p.ward;
   p.id     = document.getElementById('e-id').value||p.id;
-  p.age    = document.getElementById('e-age').value||p.age;
-  p.sex    = document.getElementById('e-sex').value||p.sex;
-  p.weight = document.getElementById('e-weight').value||p.weight;
   p.diag   = document.getElementById('e-diag').value||p.diag;
   p.priority = document.getElementById('e-priority').value;
-  p.creatinine = document.getElementById('e-cr').value||p.creatinine;
-  p.egfr   = parseInt(document.getElementById('e-egfr').value)||p.egfr;
+  const newCr = document.getElementById('e-cr').value;
+  if(newCr!==p.creatinine){ p.sCr_date = new Date().toISOString().split('T')[0]; }
+  p.creatinine = newCr;
+  const egv = document.getElementById('e-egfr').value;
+  p.egfr   = egv===''?'':parseInt(egv);
+  p.ccr    = document.getElementById('e-ccr').value;
   p.notes  = document.getElementById('e-notes').value;
   // update detailId in case id changed
   detailId = p.id;
@@ -1039,82 +1049,6 @@ function renderAlerts(){
         </div>
       </div>`).join('')}`;
 }
-
-/* ══ Renal Tab ══ */
-function renderRenal(){
-  const stages=[{g:'G1',c:'#1D9E75',r:'≥90'},{g:'G2',c:'#639922',r:'60–89'},{g:'G3a',c:'#EF9F27',r:'45–59'},{g:'G3b',c:'#BA7517',r:'30–44'},{g:'G4',c:'#E24B4A',r:'15–29'},{g:'G5',c:'#A32D2D',r:'<15'}];
-  document.getElementById('viewroot').innerHTML=renderWardTabs()+`
-    <div class="kdigo-legend">
-      <span>KDIGO 2024 GFR 分期：</span>
-      ${stages.map(s=>`<div class="kl-item"><div class="kl-dot" style="background:${s.c}25;border:1px solid ${s.c}"></div><span style="color:${s.c};font-weight:500">${s.g}</span><span style="color:var(--tx2)">(${s.r})</span></div>`).join('')}
-    </div>
-    <table class="ptbl">
-      <thead><tr>
-        <th>床號</th><th>編號</th>
-        <th>sCr (mg/dL)<br><span style="font-weight:400;font-size:10px">可直接修改</span></th>
-        <th>eGFR<br><span style="font-weight:400;font-size:10px">可直接修改</span></th>
-        <th>CCr (mL/min)</th><th>GFR 分期</th><th>趨勢</th>
-        <th>住院期間腎功能變化<br><span style="font-weight:400;font-size:10px">可新增紀錄</span></th>
-        <th></th>
-      </tr></thead>
-      <tbody>
-      ${getWardPts().map(p=>{
-        const s=kdigoStage(p.egfr),ccr=calcCCr(p.age,p.weight,p.creatinine,p.sex);
-        const hist=p.renalHistory||[];
-        let trend='—';
-        if(hist.length>=2){
-          const prev=hist[hist.length-2].egfr,curr=hist[hist.length-1].egfr,diff=curr-prev;
-          if(diff>2)trend=`<span style="color:#3B6D11">↑ 改善 (+${diff})</span>`;
-          else if(diff<-2)trend=`<span style="color:#A32D2D">↓ 惡化 (${diff})</span>`;
-          else trend=`<span style="color:var(--tx2)">→ 穩定</span>`;
-        }else if(hist.length===1){trend='<span style="color:var(--tx2)">初次記錄</span>';}
-        return`<tr>
-          <td style="font-weight:500">${p.bed||'—'}</td>
-          <td style="font-size:12px;color:var(--tx2)">${p.id}</td>
-          <td><input type="number" step="0.1" min="0" value="${p.creatinine}"
-            style="width:72px;height:27px;font-size:12.5px;text-align:center"
-            onchange="saveField('${p.id}','creatinine',this.value);saveField('${p.id}','sCr_date',new Date().toISOString().split('T')[0]);render()"/></td>
-          <td>
-            <div style="display:flex;align-items:center;gap:5px">
-              <div style="width:36px;height:6px;border-radius:3px;background:var(--bg2);overflow:hidden">
-                <div style="width:${Math.min(100,(p.egfr/120)*100)}%;height:100%;background:${s.color}"></div>
-              </div>
-              <input type="number" min="0" max="200" value="${p.egfr}"
-                style="width:52px;height:27px;font-size:12.5px;text-align:center"
-                onchange="saveField('${p.id}','egfr',parseInt(this.value)||0);render()"/>
-            </div>
-          </td>
-          <td style="font-weight:500;font-size:13px">${ccr!=null?ccr:'—'}</td>
-          <td><span class="ptag" style="background:${s.color}22;color:${s.color}">${s.g} — ${s.label}</span></td>
-          <td style="font-size:12.5px">${trend}</td>
-          <td>
-            <div style="max-height:120px;overflow-y:auto">
-              <table class="hist-tbl">
-                <thead><tr><th>日期</th><th>sCr</th><th>eGFR</th><th></th></tr></thead>
-                <tbody>
-                ${hist.map((h,i)=>`<tr>
-                  <td><input type="date" value="${h.date}" style="width:110px" onchange="saveHist('${p.id}',${i},'date',this.value)"/></td>
-                  <td><input type="number" step="0.1" value="${h.sCr}" style="width:56px" onchange="saveHist('${p.id}',${i},'sCr',this.value)"/></td>
-                  <td><input type="number" value="${h.egfr}" style="width:50px" onchange="saveHist('${p.id}',${i},'egfr',parseInt(this.value)||0)"/></td>
-                  <td><button class="del-med-btn" onclick="deleteHist('${p.id}',${i})">✕</button></td>
-                </tr>`).join('')}
-                </tbody>
-              </table>
-            </div>
-            <button class="add-hist-btn" onclick="addHist('${p.id}')">＋ 新增</button>
-          </td>
-          <td style="white-space:nowrap;vertical-align:top;padding-top:10px">
-            <button class="delbtn" onclick="confirmDeleteRenal('${p.id}')">🗑</button>
-          </td>
-        </tr>`;
-      }).join('')}
-      </tbody>
-    </table>`;
-}
-
-function saveHist(pid,idx,field,val){const p=pts.find(x=>x.id===pid);if(p&&p.renalHistory[idx])p.renalHistory[idx][field]=field==='egfr'?parseInt(val)||0:val;}
-function deleteHist(pid,idx){const p=pts.find(x=>x.id===pid);if(p){p.renalHistory.splice(idx,1);saveData();renderRenal();}}
-function addHist(pid){const p=pts.find(x=>x.id===pid);if(p){const t=new Date().toISOString().split('T')[0];p.renalHistory.push({date:t,sCr:p.creatinine,egfr:p.egfr});saveData();renderRenal();}}
 
 /* ══ Labs Tab ══ */
 function renderLabs(){
@@ -1154,24 +1088,6 @@ function renderLabs(){
       </tbody>
     </table>`;
 }
-
-/* ══ Delete: Renal only ══ */
-function confirmDeleteRenal(pid){
-  const p=pts.find(x=>x.id===pid);if(!p)return;
-  pendingDeleteId=pid;
-  document.getElementById('confirmroot').innerHTML=`
-    <div class="confirm-backdrop" onclick="if(event.target===this)cancelDelete()">
-      <div class="confirm-box">
-        <h4>清除腎功能紀錄</h4>
-        <p>確定要清除床號 <strong>${p.bed||'—'}</strong>（${p.id}）的所有住院腎功能歷史紀錄嗎？<br>其他病患資料不受影響。</p>
-        <div class="confirm-btns">
-          <button class="cbtn-cancel" onclick="cancelDelete()">取消</button>
-          <button class="cbtn-del" onclick="doDeleteRenal()">確認清除</button>
-        </div>
-      </div>
-    </div>`;
-}
-function doDeleteRenal(){const p=pts.find(x=>x.id===pendingDeleteId);if(p)p.renalHistory=[];pendingDeleteId=null;saveData();document.getElementById('confirmroot').innerHTML='';renderRenal();}
 
 /* ══ Delete: Lab only ══ */
 function confirmDeleteLab(pid){
@@ -1229,21 +1145,19 @@ function renderModal(){
         <h2>新增病患</h2>
         <div class="fgrid">
           <div class="fg"><label>床號</label><input id="m-bed" placeholder="5A-12"/></div>
-          <div class="fg"><label>病房</label><select id="m-ward"><option value="">選擇病房</option><option value="3A">3A</option><option value="3B">3B</option><option value="5A">5A</option><option value="5B">5B</option><option value="6A">6A</option><option value="6B">6B</option><option value="7A">7A</option><option value="7B">7B</option></select></div>
+          <div class="fg"><label>病房</label><select id="m-ward"><option value="">選擇病房</option>${WARDS.slice(1).map(w=>`<option value="${w}">${w}</option>`).join('')}</select></div>
           <div class="fg"><label>編號</label><input id="m-id" placeholder="123456"/></div>
-          <div class="fg"><label>年齡</label><input id="m-age" type="number" placeholder="歲"/></div>
-          <div class="fg"><label>性別</label><select id="m-sex"><option value="M">男 (M)</option><option value="F">女 (F)</option></select></div>
-          <div class="fg"><label>體重 (kg)</label><input id="m-wt" type="number" placeholder="kg"/></div>
           <div class="fg full"><label>診斷</label><input id="m-diag" placeholder="主要診斷"/></div>
           <div class="fg"><label>Creatinine (mg/dL)</label><input type="number" step="0.1" id="m-cr" placeholder="0.0"/></div>
           <div class="fg"><label>eGFR (mL/min/1.73m²)</label><input type="number" id="m-egfr" placeholder="0"/></div>
+          <div class="fg"><label>CCr (mL/min)</label><input type="number" step="0.1" id="m-ccr" placeholder="0"/></div>
           <div class="fg"><label>優先等級</label>
             <select id="m-pri"><option>Critical</option><option>High</option><option>Medium</option><option>Low</option><option selected>Routine</option></select>
           </div>
           <div class="fg"><label>介入日期</label><input type="date" id="m-date"/></div>
           <div class="fg"><label>下次抽血日期</label><input type="date" id="m-nextlab"/></div>
         </div>
-        <div style="font-size:11px;color:var(--tx2);margin:4px 0 6px;font-weight:500">用藥清單</div>
+        <div style="font-size:11px;color:var(--tx2);margin:4px 0 6px;font-weight:500">藥物紀錄<span style="font-weight:400">(抗生素審核、特殊藥物...)</span></div>
         <table class="modal-med-tbl">
           <thead><tr>
             <th style="width:27%">藥名</th><th style="width:15%">劑量</th>
@@ -1299,19 +1213,18 @@ function removeModalMed(i){ removeModalMedRow(i); }
 function closeModal(){document.getElementById('modalroot').innerHTML='';}
 function savePatient(){
   const today=new Date().toISOString().split('T')[0];
-  const cr=document.getElementById('m-cr').value||'0';
-  const egfr=parseInt(document.getElementById('m-egfr').value)||60;
+  const cr=document.getElementById('m-cr').value;
+  const egv=document.getElementById('m-egfr').value;
+  const egfr=egv===''?'':parseInt(egv);
   pts.push({
     id:document.getElementById('m-id').value||'NEW',
     bed:document.getElementById('m-bed').value||'',
     ward:document.getElementById('m-ward').value||'',
-    age:document.getElementById('m-age').value||'—',
-    sex:document.getElementById('m-sex').value||'M',
-    weight:document.getElementById('m-wt').value||'—',
     diag:document.getElementById('m-diag').value||'—',
     priority:document.getElementById('m-pri').value,
     creatinine:cr,sCr_date:document.getElementById('m-date').value||today,egfr:egfr,
-    renalHistory:[{date:document.getElementById('m-date').value||today,sCr:cr,egfr:egfr}],
+    ccr:document.getElementById('m-ccr').value||'',
+    renalHistory:(cr!==''||egfr!=='')?[{date:document.getElementById('m-date').value||today,sCr:cr,egfr:egfr}]:[],
     meds:modalMeds.filter(m=>m&&m.name).map(m=>({...m,abxStart:m.abxStart||'',abxStop:m.abxStop||''})),
     electrolytes:'',
     otherLab:document.getElementById('m-otherlab').value||'',
@@ -1379,7 +1292,7 @@ function renderAbxWatch(){
         <div class="l">超過 14 天警示</div>
       </div>
       <div class="sc" style="flex:1;min-width:140px">
-        <div class="n" style="color:#0E7490">${activeCount}</div>
+        <div class="n" style="color:#3A4D6B">${activeCount}</div>
         <div class="l">目前使用中</div>
       </div>
       <div class="sc" style="flex:1;min-width:140px">
@@ -1447,7 +1360,7 @@ function renderAbxWatch(){
           <td style="font-size:12px;max-width:120px">${p.diag}</td>
           <td><span class="ptag ${pClass(p.priority)}">${p.priority}</span></td>
           <td style="font-weight:600">${m.name}</td>
-          <td style="font-size:12px;color:#0E7490">${genericLabel}</td>
+          <td style="font-size:12px;color:#3A4D6B">${genericLabel}</td>
           <td style="font-size:12px;color:var(--tx2)">${m.dose} ${m.freq}</td>
           <td>
             <input type="date" value="${start}"
@@ -1471,12 +1384,159 @@ function renderAbxWatch(){
     </table>`;
 }
 
+
+/* ══ Handoff Export（交班匯出） ══ */
+let hoWard='全部', hoSel=new Set();
+function hoEsc(s){return String(s??'').replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));}
+function hoHas(v){return v!==undefined&&v!==null&&String(v).trim()!=='';}
+function hoPatients(){const l=hoWard==='全部'?pts:pts.filter(p=>(p.ward||'')===hoWard);return [...l].sort(bedSort);}
+function hoData(){return hoPatients().filter(p=>hoSel.has(p.id));}
+function hoNow(){const d=new Date(),z=n=>String(n).padStart(2,'0');return `${d.getFullYear()}-${z(d.getMonth()+1)}-${z(d.getDate())} ${z(d.getHours())}:${z(d.getMinutes())}`;}
+function hoAbxInfo(m){
+  if(!isAntibiotic(m.name)||!hoHas(m.abxStart))return '';
+  const s=new Date(m.abxStart),e=hoHas(m.abxStop)?new Date(m.abxStop):new Date();
+  const days=Math.max(0,Math.ceil((e-s)/(1000*60*60*24)));
+  return hoHas(m.abxStop)?`抗生素 ${m.abxStart}～${m.abxStop}，共 ${days} 天（已停藥）`:`抗生素 ${m.abxStart} 起，已使用 ${days} 天`;
+}
+function hoGeneric(m){
+  const g=getGenericNames(m.name).map(x=>x.charAt(0).toUpperCase()+x.slice(1)).join(' / ');
+  return g&&g.toLowerCase()!==String(m.name).trim().toLowerCase()?g:'';
+}
+function hoRenal(p){
+  const parts=[];
+  if(hoHas(p.creatinine))parts.push(`sCr ${p.creatinine}${hoHas(p.sCr_date)?`（${p.sCr_date}）`:''}`);
+  const ev=egfrNum(p);
+  if(ev!==null)parts.push(`eGFR ${p.egfr}（${kdigoStage(p.egfr).g}）`);
+  if(hoHas(p.ccr))parts.push(`CCr ${p.ccr}`);
+  return parts;
+}
+function hoMeds(p){return (p.meds||[]).filter(m=>m&&hoHas(m.name));}
+function hoWardLabel(){return hoWard==='全部'?'全部病房':hoWard+' 病房';}
+
+function hoSheetHTML(list){
+  const head=`<div class="ho-head"><div class="ho-title">病房藥師交班單</div>
+    <div class="ho-meta">${hoEsc(hoWardLabel())}｜共 ${list.length} 位｜交班：${hoEsc(currentUser?currentUser.displayName:'')}｜${hoNow()}</div></div>`;
+  if(!list.length)return `<div class="ho-sheet">${head}<div class="ho-empty">尚未勾選病患</div></div>`;
+  const row=(lb,val)=>`<div class="ho-row"><div class="ho-lb">${lb}</div><div class="ho-val">${val}</div></div>`;
+  const cards=list.map(p=>{
+    const s=kdigoStage(p.egfr), out=[];
+    if(hoHas(p.diag))out.push(row('診斷',hoEsc(p.diag)));
+    const renal=hoRenal(p);
+    if(renal.length)out.push(row('腎功能',hoEsc(renal.join('｜'))));
+    const meds=hoMeds(p);
+    if(meds.length)out.push(row('藥物紀錄','<ul class="ho-meds">'+meds.map(m=>{
+      const g=hoGeneric(m),abx=hoAbxInfo(m);
+      const base=[m.name+(g?` (${g})`:''),m.dose,m.freq,m.route].filter(hoHas).join(' ');
+      return `<li>${hoEsc(base)}${hoHas(m.note)?` — ${hoEsc(m.note)}`:''}${abx?`<div class="ho-abx">${hoEsc(abx)}</div>`:''}</li>`;
+    }).join('')+'</ul>'));
+    if(hoHas(p.nextLab))out.push(row('下次抽血',hoEsc(p.nextLab+(hoHas(p.labNote)?`（${p.labNote}）`:''))));
+    if(hoHas(p.electrolytes))out.push(row('電解質',hoEsc(p.electrolytes)));
+    if(hoHas(p.otherLab))out.push(row('Other Lab',hoEsc(p.otherLab)));
+    if(hoHas(p.culture))out.push(row('Culture',hoEsc(p.culture)));
+    if(hoHas(p.notes))out.push(row('藥師備註',hoEsc(p.notes)));
+    if(hoHas(p.lastIntv))out.push(row('最後介入',hoEsc(p.lastIntv)));
+    const stageTag=egfrNum(p)!==null?`<span class="ho-tag" style="color:${s.color};border-color:${s.color}66;background:${s.color}14">${s.g}</span>`:'';
+    return `<div class="ho-card pri-${hoEsc(p.priority)}">
+      <div class="ho-card-top"><span class="ho-bed">${hoEsc(p.bed||'—')}</span><span class="ho-id">${hoEsc(p.id)}</span>
+        ${hoHas(p.ward)?`<span class="ho-id">${hoEsc(p.ward)} 病房</span>`:''}
+        ${hoHas(p.priority)?`<span class="ptag ${pClass(p.priority)}">${hoEsc(p.priority)}</span>`:''}${stageTag}</div>
+      ${out.join('')}</div>`;
+  }).join('');
+  return `<div class="ho-sheet">${head}${cards}</div>`;
+}
+
+function hoText(list){
+  const F=(lb,v)=>{const s=String(v).trim();return s.includes('\n')?`${lb}：\n`+s.split('\n').map(x=>'　'+x).join('\n'):`${lb}：${s}`;};
+  const L=[`【病房藥師交班單】${hoWardLabel()}｜共 ${list.length} 位｜交班：${currentUser?currentUser.displayName:''}｜${hoNow()}`];
+  list.forEach(p=>{
+    L.push('━━━━━━━━━━━━');
+    L.push(`▍${p.bed||'—'}（${p.id}）${hoHas(p.priority)?' '+p.priority:''}`);
+    if(hoHas(p.diag))L.push(F('診斷',p.diag));
+    const renal=hoRenal(p); if(renal.length)L.push(`腎功能：${renal.join('｜')}`);
+    const meds=hoMeds(p);
+    if(meds.length){L.push('藥物紀錄：');meds.forEach(m=>{
+      const g=hoGeneric(m),abx=hoAbxInfo(m);
+      L.push(`・${[m.name+(g?` (${g})`:''),m.dose,m.freq,m.route].filter(hoHas).join(' ')}${hoHas(m.note)?' — '+m.note:''}${abx?`【${abx}】`:''}`);
+    });}
+    if(hoHas(p.nextLab))L.push(`下次抽血：${p.nextLab}${hoHas(p.labNote)?`（${p.labNote}）`:''}`);
+    if(hoHas(p.electrolytes))L.push(F('電解質',p.electrolytes));
+    if(hoHas(p.otherLab))L.push(F('Other Lab',p.otherLab));
+    if(hoHas(p.culture))L.push(F('Culture',p.culture));
+    if(hoHas(p.notes))L.push(F('藥師備註',p.notes));
+    if(hoHas(p.lastIntv))L.push(`最後介入：${p.lastIntv}`);
+  });
+  return L.join('\n');
+}
+
+function openHandoff(){hoWard=activeWard;hoSel=new Set(hoPatients().map(p=>p.id));renderHandoff();}
+function hoSetWard(w){hoWard=w;hoSel=new Set(hoPatients().map(p=>p.id));renderHandoff();}
+function hoAll(on){hoSel=on?new Set(hoPatients().map(p=>p.id)):new Set();renderHandoff();}
+function hoToggle(id,on){on?hoSel.add(id):hoSel.delete(id);hoRefresh();}
+function hoRefresh(){
+  const pv=document.getElementById('ho-preview'); if(pv)pv.innerHTML=hoSheetHTML(hoData());
+  const ct=document.getElementById('ho-count'); if(ct)ct.textContent=`已選 ${hoSel.size} / ${hoPatients().length} 位`;
+  const msg=document.getElementById('ho-msg'); if(msg)msg.textContent='';
+  const fb=document.getElementById('ho-fallback'); if(fb)fb.remove();
+}
+function renderHandoff(){
+  const list=hoPatients();
+  document.getElementById('modalroot').innerHTML=`
+    <div class="modal-bd" onclick="if(event.target===this)closeModal()">
+      <div class="modal ho-modal">
+        <h2>交班匯出</h2>
+        <div class="ho-controls">
+          <label style="font-size:12px;color:var(--tx2)">病房</label>
+          <select onchange="hoSetWard(this.value)">${WARDS.map(w=>`<option value="${w}" ${w===hoWard?'selected':''}>${w==='全部'?'全部病房':w}</option>`).join('')}</select>
+          <span id="ho-count" style="font-size:12px;color:var(--tx2)">已選 ${hoSel.size} / ${list.length} 位</span>
+          <button class="ho-link" onclick="hoAll(true)">全選</button>
+          <button class="ho-link" onclick="hoAll(false)">全不選</button>
+        </div>
+        <div class="ho-picks">
+          ${list.length?list.map(p=>`<label class="ho-pick"><input type="checkbox" ${hoSel.has(p.id)?'checked':''}
+            onchange="hoToggle('${p.id}',this.checked)"/>${hoEsc(p.bed||'—')} <span style="color:var(--tx2)">${hoEsc(p.id)}</span></label>`).join('')
+            :'<span style="font-size:12px;color:var(--tx2)">此病房目前沒有病患</span>'}
+        </div>
+        <div class="ho-preview" id="ho-preview">${hoSheetHTML(hoData())}</div>
+        <div class="ho-actions">
+          <span class="ho-msg" id="ho-msg"></span>
+          <button class="mbcancel" style="height:34px;padding:0 15px;border-radius:var(--r)" onclick="closeModal()">關閉</button>
+          <button class="ho-btn" onclick="hoCopy()">複製文字</button>
+          <button class="add-btn" onclick="hoPrint()">列印 / 存成 PDF</button>
+        </div>
+      </div>
+    </div>`;
+}
+function hoPrint(){
+  if(!hoSel.size){document.getElementById('ho-msg').textContent='請先勾選病患';return;}
+  document.getElementById('printroot').innerHTML=hoSheetHTML(hoData());
+  window.print();
+}
+function hoCopy(){
+  const msg=document.getElementById('ho-msg');
+  if(!hoSel.size){msg.style.color='#A63A3A';msg.textContent='請先勾選病患';return;}
+  const text=hoText(hoData());
+  const done=()=>{msg.style.color='#3B6D11';msg.textContent='✓ 已複製，可直接貼上到 LINE 或 email';};
+  const fallback=()=>{
+    msg.style.color='#8A6D35';msg.textContent='瀏覽器不允許自動複製，請在下方文字框按 Ctrl+A、Ctrl+C';
+    let fb=document.getElementById('ho-fallback');
+    if(!fb){fb=document.createElement('textarea');fb.id='ho-fallback';fb.className='ho-fallback';document.querySelector('.ho-actions').after(fb);}
+    fb.value=text;fb.focus();fb.select();
+  };
+  try{
+    if(navigator.clipboard&&window.isSecureContext){navigator.clipboard.writeText(text).then(done,fallback);}
+    else{
+      const t=document.createElement('textarea');t.value=text;t.style.position='fixed';t.style.opacity='0';
+      document.body.appendChild(t);t.select();const ok=document.execCommand&&document.execCommand('copy');t.remove();
+      ok?done():fallback();
+    }
+  }catch(e){fallback();}
+}
+
 /* ══ Main render ══ */
 function render(){
   renderSummary();
   if(activeTab==='patients')renderPatients();
   else if(activeTab==='alerts')renderAlerts();
-  else if(activeTab==='renal')renderRenal();
   else if(activeTab==='abxwatch')renderAbxWatch();
   else renderLabs();
 }
