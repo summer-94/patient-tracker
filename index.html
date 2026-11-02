@@ -1142,7 +1142,7 @@ let modalMeds=[{name:'',dose:'',freq:'QD',route:'PO',note:'',abxStart:'',abxStop
 function openModal(){modalMeds=[{name:'',dose:'',freq:'QD',route:'PO',note:'',abxStart:'',abxStop:''}];renderModal();}
 function renderModal(){
   document.getElementById('modalroot').innerHTML=`
-    <div class="modal-bd" onclick="if(event.target===this)closeModal()">
+    <div class="modal-bd">
       <div class="modal">
         <h2>新增病患</h2>
         <div class="fgrid">
@@ -1184,7 +1184,7 @@ function renderModal(){
           <div class="fg"><label>藥師備註</label><textarea id="m-notes" placeholder="介入說明、待追蹤事項…"></textarea></div>
         </div>
         <div class="mbtns" style="margin-top:1rem">
-          <button class="mbcancel" onclick="closeModal()">取消</button>
+          <button class="mbcancel" onclick="tryCloseAddModal()">取消</button>
           <button class="mbsave" onclick="savePatient()">儲存</button>
         </div>
       </div>
@@ -1533,6 +1533,34 @@ function hoCopy(){
     }
   }catch(e){fallback();}
 }
+
+
+/* ══ 新增病患視窗：防止誤關遺失資料 ══ */
+function addModalDirty(){
+  const root=document.getElementById('modalroot');
+  if(!root||!document.getElementById('m-id'))return false;   // 新增視窗沒開
+  const typed=[...root.querySelectorAll('input:not([type=checkbox]),textarea')].some(el=>el.value.trim()!=='');
+  const ward=document.getElementById('m-ward');
+  return typed||(ward&&ward.value!=='');
+}
+function tryCloseAddModal(){
+  if(!addModalDirty()){closeModal();return;}
+  document.getElementById('confirmroot').innerHTML=`
+    <div class="confirm-backdrop">
+      <div class="confirm-box">
+        <h4>資料尚未儲存</h4>
+        <p>新增病患的資料還沒儲存，確定要關閉嗎？<br>關閉後填寫的內容會消失。</p>
+        <div class="confirm-btns">
+          <button class="cbtn-cancel" onclick="document.getElementById('confirmroot').innerHTML=''">繼續編輯</button>
+          <button class="cbtn-del" onclick="document.getElementById('confirmroot').innerHTML='';closeModal()">放棄並關閉</button>
+        </div>
+      </div>
+    </div>`;
+}
+// 填寫中（新增視窗或詳情頁編輯模式）若重新整理/關閉分頁，瀏覽器會先詢問
+window.addEventListener('beforeunload',e=>{
+  if(addModalDirty()||(typeof editMode!=='undefined'&&editMode)){e.preventDefault();e.returnValue='';}
+});
 
 /* ══ Main render ══ */
 function render(){
