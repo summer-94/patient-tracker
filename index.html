@@ -561,7 +561,7 @@ function loadData(){
       pts.forEach(p => {
         if(p.freeNote){ p.notes = [p.notes, p.freeNote].filter(Boolean).join('\n'); migrated = true; }
         if('freeNote' in p){ delete p.freeNote; migrated = true; }
-        if(p.ward==='NI'){ p.ward='NICU'; migrated = true; }
+        if(p.ward==='NI'||p.ward==='NICU'){ p.ward='NI / NOR'; migrated = true; }
       });
       if(migrated) saveData();
     }
@@ -737,7 +737,7 @@ function switchTab(t){
 }
 
 /* ══ Summary ══ */
-const WARDS=['全部','2W','2A','2B','2C','3A','3B','5A','5B','6A','6B','7A','7B','NICU'];
+const WARDS=['全部','2W','2A','2B','2C','3A','3B','5A','5B','6A','6B','7A','7B','NI / NOR','RCC'];
 let activeWard='全部';
 
 function getWardPts(){
